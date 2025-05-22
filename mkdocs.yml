@@ -55,7 +55,6 @@ plugins:
   - search
   - mkdocstrings:
       default_handler: python
-      watch: [openai_toolchain]
       handlers:
         python:
           selection:
