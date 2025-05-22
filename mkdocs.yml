@@ -1,6 +1,6 @@
 site_name: OpenAI Toolchain
-# Use empty site_url for local development
-site_url: ""
+# GitHub Pages URL format for project sites
+site_url: https://bemade.github.io/openai-toolchain/
 repo_url: https://github.com/bemade/openai-toolchain
 
 docs_dir: docs
