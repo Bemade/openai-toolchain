@@ -10,15 +10,6 @@
 A Python library for working with OpenAI's function calling API, making it
 easier to create and manage tools that can be used with OpenAI's chat models.
 
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Features
 
 - 🛠️ Simple function registration with `@tool` decorator

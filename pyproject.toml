@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "openai-toolchain"
-version = "0.1.0"
+version = "0.1.1"
 description = "A minimal and intuitive library for working with OpenAI's function calling API"
 authors = [
     {name = "Mark Durepos", email = "marc@bemade.org"}
 ]
 requires-python = ">=3.8"
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
