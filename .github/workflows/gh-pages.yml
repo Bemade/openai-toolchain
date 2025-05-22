@@ -2,20 +2,16 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main] # Change to your default branch name if different
+    branches: [main]
   pull_request:
     branches: [main]
-
-  # Allow manual deployment
   workflow_dispatch:
 
-# Sets permissions for GITHUB_TOKEN
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Only one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -25,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -35,30 +31,15 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mkdocs-material mkdocstrings[python] mkdocs-git-revision-date-localized-plugin
+          pip install -e ".[docs]"
 
       - name: Build documentation
         run: mkdocs build --strict
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: ./site
-
-  deploy-to-pages:
-    needs: deploy
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' # Only run on main branch
-    steps:
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: site
+          token: ${{ secrets.GITHUB_TOKEN }}
+          clean: true
