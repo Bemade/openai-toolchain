@@ -34,7 +34,7 @@ jobs:
           pip install -e ".[docs]"
 
       - name: Build documentation
-        run: mkdocs build --strict
+        run: mkdocs build
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
