@@ -69,7 +69,7 @@ print(response)
 
 For detailed documentation, including API reference and examples, please visit:
 
-📚 [Documentation](https://github.com/bemade/openai-toolchain#readme)
+📚 [Documentation](https://bemade.github.io/openai-toolchain/)
 
 Or run the documentation locally:
 
@@ -80,7 +80,7 @@ mkdocs serve
 
 ## Contributing
 
-Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md)
+Contributions are welcome! Please see our [Contributing Guide](https://bemade.github.io/openai-toolchain/CONTRIBUTING/)
 for details.
 
 ### Pre-commit Hooks
@@ -114,7 +114,7 @@ git commit --no-verify -m "Your commit message"
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/Bemade/openai-toolchain/blob/main/LICENSE) file
 for details.
 
 # Initialize the client with your API key
