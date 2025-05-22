@@ -66,9 +66,9 @@ docs = [
 
 [project.urls]
 Homepage = "https://github.com/bemade/openai-toolchain"
-Documentation = "https://github.com/bemade/openai-toolchain#readme"
+Documentation = "https://bemade.github.io/openai-toolchain/"
 BugTracker = "https://github.com/bemade/openai-toolchain/issues"
-Changelog = "https://github.com/bemade/openai-toolchain/releases"
+Changelog = "https://bemade.github.io/openai-toolchain/CHANGELOG/"
 
 [project.readme]
 file = "README.md"
