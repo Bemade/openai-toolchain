@@ -43,13 +43,6 @@ dev = [
     "flake8-bugbear>=24.0.0",
     "pre-commit>=3.0.0",
 
-    # Documentation
-    "mkdocs>=1.5.0",
-    "mkdocs-material>=9.0.0",
-    "mkdocstrings[python]>=0.24.0",
-    "mkdocs-gen-files>=0.5.0",
-    "mkdocs-literate-nav>=0.6.0",
-    "mkdocs-material-extensions>=9.0.0",
 
     # Build and release
     "build>=0.10.0",
@@ -68,7 +61,7 @@ docs = [
     "mkdocstrings[python]>=0.24.0",
     "mkdocs-gen-files>=0.5.0",
     "mkdocs-literate-nav>=0.6.0",
-    "mkdocs-material-extensions>=9.0.0",
+    "mkdocs-material-extensions>=1.0.0",  # Latest stable version
 ]
 
 [project.urls]

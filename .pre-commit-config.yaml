@@ -47,8 +47,8 @@ repos:
     hooks:
       - id: prettier
         name: prettier (formatter)
-        types_or: [yaml, json, markdown, html, css, scss]
-        args: [--prose-wrap=always]
+        types_or: [yaml, json, html, css, scss]
+        exclude: ^docs/
 
   # Security checks
   - repo: https://github.com/PyCQA/bandit

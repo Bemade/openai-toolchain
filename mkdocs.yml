@@ -1,6 +1,10 @@
 site_name: OpenAI Toolchain
-site_url: https://github.com/bemade/openai-toolchain
+# Use empty site_url for local development
+site_url: ""
 repo_url: https://github.com/bemade/openai-toolchain
+
+docs_dir: docs
+dev_addr: 127.0.0.1:8000
 
 theme:
   name: material
@@ -46,34 +50,24 @@ markdown_extensions:
   - pymdownx.tilde
   - attr_list
   - md_in_html
-  - pymdownx.emoji:
-      emoji_index: "materialx.emoji.twemoji"
-      emoji_generator: "materialx.emoji.to_svg"
 
 plugins:
   - search
   - mkdocstrings:
       default_handler: python
+      watch: [openai_toolchain]
       handlers:
         python:
-          options:
+          selection:
             docstring_style: google
-            show_root_heading: true
-            show_source: true
-            show_category_heading: true
-            separate_signature: true
-            show_submodules: true
-            show_inherited_members: true
-            show_bases: true
-            show_signature_annotations: true
 
 nav:
   - Home: index.md
   - Installation: installation.md
   - Tutorial: tutorial.md
   - API Reference: reference/
-  - Changelog: ../CHANGELOG.md
-  - Contributing: ../CONTRIBUTING.md
+  - Changelog: CHANGELOG.md
+  - Contributing: CONTRIBUTING.md
 
 extra_css:
   - stylesheets/extra.css
