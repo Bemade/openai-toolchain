@@ -1,0 +1,79 @@
+site_name: OpenAI Toolchain
+site_url: https://github.com/bemade/openai-toolchain
+repo_url: https://github.com/bemade/openai-toolchain
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.indexes
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - navigation.expand
+    - navigation.instant
+    - navigation.tracking
+    - search.highlight
+    - search.suggest
+    - content.tabs.link
+    - content.code.copy
+    - content.code.annotate
+
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.smartsymbols
+  - pymdownx.tabbed
+  - pymdownx.tilde
+  - attr_list
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: "materialx.emoji.twemoji"
+      emoji_generator: "materialx.emoji.to_svg"
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_root_heading: true
+            show_source: true
+            show_category_heading: true
+            separate_signature: true
+            show_submodules: true
+            show_inherited_members: true
+            show_bases: true
+            show_signature_annotations: true
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Tutorial: tutorial.md
+  - API Reference: reference/
+  - Changelog: ../CHANGELOG.md
+  - Contributing: ../CONTRIBUTING.md
+
+extra_css:
+  - stylesheets/extra.css

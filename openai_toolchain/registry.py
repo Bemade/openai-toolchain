@@ -1,52 +1,44 @@
 """Tool registry for managing and calling registered tools."""
 
 import inspect
-import json
 import logging
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    List,
-    Optional,
-    Type,
-    Union,
-    get_type_hints,
-    get_origin,
-    get_args,
-)
+from collections.abc import Callable, MutableMapping
+from typing import Any, Dict, List, Optional, Type, TypeVar, Union, get_type_hints
 
-from pydantic import BaseModel, create_model
+T = TypeVar("T", bound=Callable[..., Any])
 
 _logger = logging.getLogger(__name__)
 
+
 class ToolError(Exception):
     """Base exception for tool-related errors."""
-    pass
+
 
 class ToolRegistry:
     """Singleton registry for AI tools with automatic schema generation."""
-    _instance = None
-    _initialized = False
 
-    def __new__(cls):
+    _instance: Optional["ToolRegistry"] = None
+    _initialized: bool = False
+
+    def __new__(cls) -> "ToolRegistry":
         if cls._instance is None:
-            cls._instance = super().__new__(cls)
+            instance = super().__new__(cls)
+            cls._instance = instance
         return cls._instance
 
-    def __init__(self):
-        if not self._initialized:
+    def __init__(self) -> None:
+        if not getattr(self, "_initialized", False):
             self._tools: Dict[str, Dict[str, Any]] = {}
             self._initialized = True
 
     def register(
         self,
-        func: Optional[Callable] = None,
+        func: Optional[T] = None,
         *,
         name: Optional[str] = None,
         description: Optional[str] = None,
-        **kwargs
-    ) -> Callable:
+        **kwargs: Any,
+    ) -> Union[Callable[[T], T], T]:
         """Register a function as a tool.
 
         Can be used as a decorator with or without arguments.
@@ -60,20 +52,19 @@ class ToolRegistry:
         Returns:
             The decorated function or a decorator
         """
-        def decorator(f: Callable) -> Callable:
-            nonlocal name, description
 
+        def decorator(f: T) -> T:
             tool_name = name or f.__name__
             tool_description = description or (f.__doc__ or "").strip()
 
             # Extract parameter information
             sig = inspect.signature(f)
-            parameters = {}
-            required = []
+            parameters: Dict[str, Any] = {}
+            required: List[str] = []
             type_hints = get_type_hints(f)
 
             for param_name, param in sig.parameters.items():
-                if param_name == 'self':
+                if param_name == "self":
                     continue
 
                 param_type = type_hints.get(param_name, str)
@@ -83,27 +74,30 @@ class ToolRegistry:
                 if param.default == inspect.Parameter.empty:
                     required.append(param_name)
 
-            # Create the tool schema
-            tool_schema = {
-                'type': 'function',
-                'function': {
-                    'name': tool_name,
-                    'description': tool_description,
-                    'parameters': {
-                        'type': 'object',
-                        'properties': parameters,
-                    }
-                }
+            # Create the tool schema with proper typing
+            tool_schema: Dict[str, Any] = {
+                "type": "function",
+                "function": {
+                    "name": tool_name,
+                    "description": tool_description,
+                    "parameters": {
+                        "type": "object",
+                        "properties": parameters,
+                    },
+                },
             }
 
             if required:
-                tool_schema['function']['parameters']['required'] = required
+                # Explicitly type the parameters dictionary
+                function_params = tool_schema["function"]["parameters"]
+                if isinstance(function_params, MutableMapping):
+                    function_params["required"] = required
 
             # Store the tool
             self._tools[tool_name] = {
-                'function': f,
-                'schema': tool_schema,
-                'metadata': kwargs
+                "function": f,
+                "schema": tool_schema,
+                "metadata": kwargs,
             }
 
             return f
@@ -112,52 +106,60 @@ class ToolRegistry:
             return decorator(func)
         return decorator
 
-    def _get_parameter_info(self, param: inspect.Parameter, param_type: Type) -> Dict[str, Any]:
-        """Get parameter information for the schema."""
-        param_info = {}
+    def _get_parameter_info(
+        self,
+        param: inspect.Parameter,
+        param_type: Type[Any],
+    ) -> Dict[str, Any]:
+        """Get parameter information for the schema.
+
+        Args:
+            param: The parameter to get info for
+            param_type: The type of the parameter
+
+        Returns:
+            Dictionary containing parameter schema information
+        """
+        param_info: Dict[str, Any] = {}
 
         # Handle different parameter types
         if param_type in (str, int, float, bool):
-            param_info['type'] = param_type.__name__
+            param_info["type"] = param_type.__name__
         elif param_type == list:
-            param_info['type'] = 'array'
-            param_info['items'] = {'type': 'string'}
+            param_info.update({"type": "array", "items": {"type": "string"}})
         elif param_type == dict:
-            param_info['type'] = 'object'
-        elif get_origin(param_type) in (list, List):
-            item_type = get_args(param_type)[0]
-            param_info['type'] = 'array'
-            param_info['items'] = {'type': self._get_type_name(item_type)}
-        elif get_origin(param_type) == Union and type(None) in get_args(param_type):
-            # Handle Optional[T] which is Union[T, None]
-            actual_type = next(t for t in get_args(param_type) if t is not type(None))
-            param_info['type'] = self._get_type_name(actual_type)
+            param_info["type"] = "object"
         else:
-            param_info['type'] = 'string'
+            param_info["type"] = "string"
 
         # Add description if available
         if param.annotation != inspect.Parameter.empty:
-            param_info['description'] = str(param.annotation)
+            param_info["description"] = str(param.annotation)
 
         # Add default value if available
         if param.default != inspect.Parameter.empty:
-            param_info['default'] = param.default
+            param_info["default"] = param.default
 
         return param_info
 
-    def _get_type_name(self, type_: Type) -> str:
-        """Convert Python type to JSON schema type name."""
-        if type_ == str:
-            return 'string'
-        elif type_ == int:
-            return 'integer'
-        elif type_ == float:
-            return 'number'
-        elif type_ == bool:
-            return 'boolean'
-        return 'string'
+    def _get_type_name(self, type_: Type[Any]) -> str:
+        """Convert Python type to JSON schema type name.
 
-    def get_tool(self, name: str) -> Optional[Callable]:
+        Args:
+            type_: The Python type to convert
+
+        Returns:
+            String representing the JSON schema type
+        """
+        type_map = {
+            str: "string",
+            int: "integer",
+            float: "number",
+            bool: "boolean",
+        }
+        return type_map.get(type_, "string")
+
+    def get_tool(self, name: str) -> Optional[Callable[..., Any]]:
         """Get a registered tool by name.
 
         Args:
@@ -167,7 +169,9 @@ class ToolRegistry:
             The registered function or None if not found
         """
         tool = self._tools.get(name)
-        return tool['function'] if tool else None
+        if tool is None:
+            return None
+        return tool.get("function")
 
     def call_tool(self, name: str, arguments: Dict[str, Any]) -> Any:
         """Call a registered tool by name with the given arguments.
@@ -187,7 +191,7 @@ class ToolRegistry:
             raise ToolError(f"Tool '{name}' not found")
 
         try:
-            return tool['function'](**arguments)
+            return tool["function"](**arguments)
         except Exception as e:
             _logger.error(f"Error calling tool '{name}': {e}", exc_info=True)
             raise ToolError(f"Error calling tool '{name}': {e}") from e
@@ -196,9 +200,9 @@ class ToolRegistry:
         """Get all registered tools in OpenAI format.
 
         Returns:
-            A list of tool definitions in OpenAI format
+            List[Dict[str, Any]]: A list of tool definitions in OpenAI format
         """
-        return [tool['schema'] for tool in self._tools.values()]
+        return [tool["schema"] for tool in self._tools.values() if "schema" in tool]
 
     def clear(self) -> None:
         """Clear all registered tools."""

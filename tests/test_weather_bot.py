@@ -1,106 +1,131 @@
-"""Integration tests for the weather bot example with real API calls."""
+"""Integration tests for the weather bot example with real API calls.
 
+This module contains integration tests for the weather bot example that make actual
+API calls to the OpenAI API. These tests verify that the tool registration and
+function calling functionality works as expected with the real API.
+"""
+
+import logging
 import os
 import sys
-import json
-import logging
+from typing import Any, Dict, List, Optional
+
 import pytest
-from pathlib import Path
 
 # Add the project root to the Python path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-# Now we can import from the package directly
-from openai_toolchain import tool, OpenAIClient, tool_registry
+from openai_toolchain.client import OpenAIClient
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 # Skip if we don't have the required environment variables
 pytestmark = pytest.mark.skipif(
     not os.getenv("OPENAI_API_KEY"),
-    reason="OPENAI_API_KEY environment variable not set"
+    reason="OPENAI_API_KEY environment variable not set",
 )
 
+
 # Define our test tools
-@tool
 def get_weather(location: str, unit: str = "celsius") -> str:
-    """Get the current weather in a given location."""
-    return f"The weather in {location} is 22 {unit}"
+    """Get the current weather in a given location.
 
-@tool
+    Args:
+        location: The location to get weather for
+        unit: The temperature unit to use (celsius or fahrenheit)
+
+    Returns:
+        str: A string describing the current weather
+    """
+    return f"The weather in {location} is 22 degrees {unit} and sunny."
+
+
 def get_forecast(location: str, days: int = 1) -> str:
-    """Get a weather forecast for a location."""
-    return f"{days}-day forecast for {location}: Sunny"
+    """Get a weather forecast for a location.
 
-def print_message(role: str, content: str, tool_calls=None):
-    """Print a formatted message with role and content."""
-    print(f"\n{'='*80}")
-    print(f"{role.upper()}:")
+    Args:
+        location: The location to get the forecast for
+        days: Number of days to forecast
+
+    Returns:
+        str: A string describing the forecast
+    """
+    return f"The forecast for {location} for the next {days} days is sunny."
+
+
+def print_message(
+    role: str,
+    content: str,
+    tool_calls: Optional[List[Dict[str, Any]]] = None,
+) -> None:
+    """Print a formatted message with role and content.
+
+    Args:
+        role: The role of the message sender (user, assistant, etc.)
+        content: The content of the message
+        tool_calls: Optional list of tool calls associated with the message
+    """
+    print(f"{role.upper()}: {content}")
+
     if tool_calls:
         print("  Tool calls:")
         for call in tool_calls:
-            print(f"  - {call.function.name}: {call.function.arguments}")
-    if content:
-        print(f"  {content}")
-    print("="*80)
+            if hasattr(call, "function") and hasattr(call.function, "name"):
+                print(
+                    f"  - {call.function.name}: {getattr(call.function, 'arguments', '')}",
+                )
 
-def test_weather_bot_integration(tool_registry):
-    """Test the weather bot with the real API using OpenAIClient."""
-    # Clear any existing tools
-    tool_registry._tools = {}
+    print("=" * 80)
 
-    # Define our test tools
-    @tool
-    def get_weather(location: str, unit: str = "celsius") -> str:
-        """Get the current weather in a given location."""
-        return f"The weather in {location} is 22 {unit}"
 
-    @tool
-    def get_forecast(location: str, days: int = 1) -> str:
-        """Get a weather forecast for a location."""
-        return f"{days}-day forecast for {location}: Sunny"
+def test_weather_bot_integration(tool_registry: Any) -> None:
+    """Test the weather bot with the real API using OpenAIClient.
 
-    # Initialize the client with our tools
-    api_key = os.getenv("OPENAI_API_KEY")
-    base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+    Args:
+        tool_registry: The tool registry instance to use for testing
+    """
+    # Skip if no API key is set
+    if not os.getenv("OPENAI_API_KEY"):
+        pytest.skip("No OPENAI_API_KEY set, skipping integration test")
 
-    print("\n" + "#"*80)
-    print("Initializing OpenAIClient...")
-    print(f"Model: POP.qwen3:30b")
-    print(f"Base URL: {base_url}")
-    print("#"*80 + "\n")
+    # Register the tools
+    tool_registry.register(get_weather)
+    tool_registry.register(get_forecast)
 
+    # Create a client
     client = OpenAIClient(
-        api_key=api_key,
-        base_url=base_url,
-        default_model="POP.qwen3:30b"
+        api_key=os.getenv("OPENAI_API_KEY"),
+        default_model="POP.qwen3:30b",
+        base_url=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
     )
 
-    # Debug: Print registered tools and their structure
-    print("\n" + "#"*40 + " REGISTERED TOOLS " + "#"*40)
-    print(f"\nTool registry contents: {tool_registry._tools}")
-    for name, tool_info in tool_registry._tools.items():
-        print(f"\nTool: {name}")
-        print(f"Type: {type(tool_info)}")
-        if isinstance(tool_info, dict):
-            print("Keys:", tool_info.keys())
-            if 'function' in tool_info:
-                print(f"Function: {tool_info['function'].__name__ if callable(tool_info['function']) else tool_info['function']}")
-            if 'schema' in tool_info:
-                print(f"Schema: {tool_info['schema']}")
-        print("Full tool info:", tool_info)
-    print("#"*80 + "\n")
+    # Print registered tools for debugging
+    print("\n" + "#" * 40 + " REGISTERED TOOLS " + "#" * 40)
+    print("\nTool registry contents:")
+    for _name, tool_info in tool_registry._tools.items():
+        print("#" * 80)
+        print(f"Tool: {_name}")
+        print("Type:", type(tool_info).__name__)
+        if hasattr(tool_info, "keys"):
+            print("Keys:", list(tool_info.keys()))
+        if "function" in tool_info:
+            func = tool_info["function"]
+            func_name = func.__name__ if callable(func) else str(func)
+            print(f"Function: {func_name}")
+        if "schema" in tool_info:
+            print(f"Schema: {tool_info['schema']}")
+    print("#" * 80 + "\n")
 
     # Test 1: Simple weather query
-    print("\n" + "="*40 + " TEST 1: SIMPLE WEATHER QUERY " + "="*40)
+    print("\n" + "=" * 40 + " TEST 1: SIMPLE WEATHER QUERY " + "=" * 40)
     user_message = "What's the weather like in Toronto?"
     print_message("User", user_message)
 
     response = client.chat_with_tools(
         messages=[{"role": "user", "content": user_message}],
-        max_tool_calls=5
+        max_tool_calls=5,
     )
 
     print_message("Assistant", response)
@@ -111,13 +136,15 @@ def test_weather_bot_integration(tool_registry):
     assert "Toronto" in response
 
     # Test 2: Complex query using multiple tools
-    print("\n" + "="*40 + " TEST 2: COMPLEX QUERY " + "="*40)
-    user_message = "What's the weather like in Toronto and what's the forecast for tomorrow?"
+    print("\n" + "=" * 40 + " TEST 2: COMPLEX QUERY " + "=" * 40)
+    user_message = (
+        "What's the weather like in Toronto and what's the forecast for tomorrow?"
+    )
     print_message("User", user_message)
 
     response = client.chat_with_tools(
         messages=[{"role": "user", "content": user_message}],
-        max_tool_calls=5
+        max_tool_calls=5,
     )
 
     print_message("Assistant", response)
