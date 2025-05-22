@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=42"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openai-toolchain"
+version = "0.1.0"
+description = "A minimal and intuitive library for working with OpenAI's function calling API"
+long_description = "file: README.md"
+long_description_content_type = "text/markdown"
+authors = [
+    {name = "Mark Durepos", email = "marc@bemade.org"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "openai>=1.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "isort>=5.0.0",
+    "mypy>=1.0.0"
+]
+
+[project.urls]
+Homepage = "https://git.bemade.org/bemade/openai-toolchain"
+Documentation = "https://git.bemade.org/bemade/openai-toolchain#readme"
+BugTracker = "https://git.bemade.org/bemade/openai-toolchain/-/issues"
+Changelog = "https://git.bemade.org/bemade/openai-toolchain/-/releases"
+
+[tool.setuptools]
+packages = ["openai_toolchain"]
