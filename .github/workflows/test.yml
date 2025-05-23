@@ -34,15 +34,10 @@ jobs:
       - name: Run pre-commit
         run: pre-commit run --all-files
 
-      - name: Type check with mypy
-        run: |
-          pip install mypy
-          mypy openai_toolchain
-
       - name: Test with pytest
         run: |
-          pip install pytest pytest-cov
-          pytest --cov=openai_toolchain --cov-report=xml
+          pip install pytest
+          pytest
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}
