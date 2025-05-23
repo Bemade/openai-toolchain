@@ -7,7 +7,7 @@ write_to = "openai_toolchain/_version.py"
 
 [project]
 name = "openai-toolchain"
-version = "0.1.1"
+version = "0.2.0"
 description = "A minimal and intuitive library for working with OpenAI's function calling API"
 authors = [
     {name = "Mark Durepos", email = "marc@bemade.org"}
