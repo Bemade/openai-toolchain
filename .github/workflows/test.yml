@@ -25,10 +25,15 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e .[test,dev] pre-commit toml pytest
-          # Install bandit with toml support in the pre-commit environment
-          pip install 'bandit[toml]' --force-reinstall
+          pip install -e .[test,dev] pre-commit
+          # Install toml package in the pre-commit environment
+          python -m pip install toml
           pre-commit install
+
+      - name: Install bandit with toml support (Python 3.12+)
+        if: ${{ matrix.python-version == '3.12' || matrix.python-version == '3.13' }}
+        run: |
+          python -m pip install 'bandit[toml]'
 
       - name: Run pre-commit
         run: pre-commit run --all-files

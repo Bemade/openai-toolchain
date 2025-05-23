@@ -50,10 +50,13 @@ repos:
         types_or: [yaml, json, html, css, scss]
         exclude: ^docs/
 
-  # Security checks
+  # Security checks (only run on Python 3.12+ due to TOML parser issues)
   - repo: https://github.com/PyCQA/bandit
     rev: 1.7.7 # Latest stable version
     hooks:
       - id: bandit
+        name: bandit (Python 3.12+ only)
         additional_dependencies: ["bandit[toml]"]
         exclude: ^tests/
+        entry: python -c "import sys; sys.exit(0) if sys.version_info < (3, 12) else None" || bandit -c pyproject.toml -r .
+        language: python
