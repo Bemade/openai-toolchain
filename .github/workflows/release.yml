@@ -35,46 +35,26 @@ jobs:
       - name: Get version
         id: version
         run: |
-          # If triggered by workflow_dispatch, use the input version
-          if [ -n "${{ github.event.inputs.version }}" ]; then
+          if [[ -n "${{ github.event.inputs.version }}" ]]; then
+            # Manual trigger with version input
             VERSION="${{ github.event.inputs.version }}"
-            # Ensure version starts with 'v' for consistency
-            if [[ ! $VERSION == v* ]]; then
-              VERSION="v$VERSION"
-            fi
-            echo "version=${VERSION#v}" >> $GITHUB_OUTPUT
-            echo "VERSION=${VERSION#v}" >> $GITHUB_ENV
-            echo "TAG_NAME=${VERSION}" >> $GITHUB_ENV
-            echo "SHOULD_TAG=true" >> $GITHUB_ENV
+            # Ensure version doesn't start with 'v' for consistency
+            VERSION=${VERSION#v}
+            echo "version=${VERSION}" >> $GITHUB_OUTPUT
+            echo "VERSION=${VERSION}" >> $GITHUB_ENV
+            echo "TAG_NAME=v${VERSION}" >> $GITHUB_ENV
+            echo "MANUAL_RELEASE=true" >> $GITHUB_ENV
           else
-            # Extract version from tag (remove 'v' prefix if present)
+            # Automatic trigger from tag
             VERSION=${GITHUB_REF#refs/tags/v}
-            echo "version=${VERSION#v}" >> $GITHUB_OUTPUT
-            echo "VERSION=${VERSION#v}" >> $GITHUB_ENV
-            echo "TAG_NAME=v${VERSION#v}" >> $GITHUB_ENV
-            echo "SHOULD_TAG=false" >> $GITHUB_ENV
+            echo "version=${VERSION}" >> $GITHUB_OUTPUT
+            echo "VERSION=${VERSION}" >> $GITHUB_ENV
+            echo "TAG_NAME=v${VERSION}" >> $GITHUB_ENV
+            echo "MANUAL_RELEASE=false" >> $GITHUB_ENV
           fi
 
-      - name: Bump version and create tag
-        if: env.SHOULD_TAG == 'true'
-        run: |
-          # Update pyproject.toml with the new version
-          sed -i 's/^version = ".*"/version = "'${{ env.VERSION }}'"/' pyproject.toml
-
-          # Configure git
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-
-          # Commit and tag
-          git add pyproject.toml
-          git commit -m "Bump version to ${{ env.VERSION }}"
-          git tag -a "${{ env.TAG_NAME }}" -m "Release ${{ env.VERSION }}"
-
-          # Push the tag
-          git push origin "${{ env.TAG_NAME }}"
-
-          # Also push the commit to the current branch
-          git push origin HEAD:${{ github.ref_name || 'main' }}
+          echo "Using version: ${VERSION}"
+          echo "Tag name: v${VERSION}"
 
       - name: Extract release notes from CHANGELOG.md
         id: changelog
@@ -113,8 +93,11 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
+          name: ${{ env.TAG_NAME }}
+          tag_name: ${{ env.TAG_NAME }}
+          generate_release_notes: ${{ !env.MANUAL_RELEASE }}
+          draft: false
+          prerelease: false
           body: |
             ### Changes
             ${{ env.CHANGELOG }}
@@ -123,8 +106,6 @@ jobs:
             ```bash
             pip install openai-toolchain==${{ steps.version.outputs.version }}
             ```
-          draft: false
-          prerelease: false
 
       - name: Build package
         run: |
