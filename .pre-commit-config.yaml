@@ -55,6 +55,10 @@ repos:
     rev: 1.7.7 # Latest stable version
     hooks:
       - id: bandit
-        args: ["-c", "pyproject.toml"]
+        name: bandit
+        entry: python -m bandit
+        args: ["-c", "pyproject.toml", "-r"]
         additional_dependencies: ["bandit[toml]"]
         exclude: ^tests/
+        language: python
+        pass_filenames: false
