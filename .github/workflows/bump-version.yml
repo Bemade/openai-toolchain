@@ -10,6 +10,16 @@ on:
       - "setup.cfg"
       - ".bumpversion.cfg"
   workflow_dispatch:
+    inputs:
+      bump_type:
+        description: "Version bump type (major/minor/patch)"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
 
 permissions:
   contents: write
@@ -47,11 +57,14 @@ jobs:
           CURRENT_VERSION=$(grep -m 1 "version =" pyproject.toml | cut -d'"' -f2)
           echo "Current version: $CURRENT_VERSION"
 
-          # Bump patch version by default
-          bump2version --current-version $CURRENT_VERSION patch \
+          # Use the bump type from workflow input or default to patch
+          BUMP_TYPE="${{ github.event.inputs.bump_type || 'patch' }}"
+          echo "Bumping $BUMP_TYPE version"
+
+          bump2version --current-version $CURRENT_VERSION $BUMP_TYPE \
             --message 'Bump version: {current_version} → {new_version} [skip ci]' \
             --tag --tag-name 'v{new_version}' \
-            pyproject.toml openai_toolchain/__init__.py
+            pyproject.toml
 
           # Get the new version
           NEW_VERSION=$(grep -m 1 "version =" pyproject.toml | cut -d'"' -f2)
