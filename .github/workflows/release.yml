@@ -42,21 +42,39 @@ jobs:
             if [[ ! $VERSION == v* ]]; then
               VERSION="v$VERSION"
             fi
-            # Update pyproject.toml with the new version
-            sed -i '' -E 's/^version = ".*"/version = "'${VERSION#v}'"/' pyproject.toml
-            git config --global user.name "GitHub Actions"
-            git config --global user.email "actions@github.com"
-            git add pyproject.toml
-            git commit -m "Bump version to ${VERSION#v}"
-            git tag -a "$VERSION" -m "Release $VERSION"
-            git push origin "$VERSION"
+            echo "version=${VERSION#v}" >> $GITHUB_OUTPUT
+            echo "VERSION=${VERSION#v}" >> $GITHUB_ENV
+            echo "TAG_NAME=${VERSION}" >> $GITHUB_ENV
+            echo "SHOULD_TAG=true" >> $GITHUB_ENV
           else
             # Extract version from tag (remove 'v' prefix if present)
             VERSION=${GITHUB_REF#refs/tags/v}
+            echo "version=${VERSION#v}" >> $GITHUB_OUTPUT
+            echo "VERSION=${VERSION#v}" >> $GITHUB_ENV
+            echo "TAG_NAME=v${VERSION#v}" >> $GITHUB_ENV
+            echo "SHOULD_TAG=false" >> $GITHUB_ENV
           fi
-          echo "version=${VERSION#v}" >> $GITHUB_OUTPUT
-          echo "VERSION=${VERSION#v}" >> $GITHUB_ENV
-          echo "TAG_NAME=${VERSION}" >> $GITHUB_ENV
+
+      - name: Bump version and create tag
+        if: env.SHOULD_TAG == 'true'
+        run: |
+          # Update pyproject.toml with the new version
+          sed -i 's/^version = ".*"/version = "'${{ env.VERSION }}'"/' pyproject.toml
+
+          # Configure git
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+          # Commit and tag
+          git add pyproject.toml
+          git commit -m "Bump version to ${{ env.VERSION }}"
+          git tag -a "${{ env.TAG_NAME }}" -m "Release ${{ env.VERSION }}"
+
+          # Push the tag
+          git push origin "${{ env.TAG_NAME }}"
+
+          # Also push the commit to the current branch
+          git push origin HEAD:${{ github.ref_name || 'main' }}
 
       - name: Extract release notes from CHANGELOG.md
         id: changelog
