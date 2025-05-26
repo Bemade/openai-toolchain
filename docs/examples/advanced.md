@@ -79,6 +79,44 @@ def get_github_user(username: str) -> dict:
     return response.json()
 ```
 
+## Using Non-AI Parameters
+
+You can mark certain parameters as non-AI parameters, which means they will be provided by the system rather than the AI. This is useful for passing in dependencies like database connections, configuration, or other runtime objects.
+
+```python
+from openai_toolchain import tool, OpenAIClient
+
+class Database:
+    def query(self, query: str) -> str:
+        # Mock database query
+        return f"Results for: {query}"
+
+@tool(non_ai_params=["db"])
+def search_database(query: str, db: Database) -> str:
+    """Search the database for information.
+    
+    Args:
+        query: The search query
+        db: Database connection (handled by the system, not AI)
+    """
+    return db.query(query)
+
+# Initialize client and dependencies
+client = OpenAIClient(api_key="your-api-key")
+db = Database()
+
+# Call with non-AI parameters
+response = client.chat_with_tools(
+    messages=[{"role": "user", "content": "Find information about Python"}],
+    tools=["search_database"],
+    tool_params={
+        "search_database": {
+            "db": db  # Pass the database connection
+        }
+    }
+)
+```
+
 ## Testing Your Tools
 
 Here's how you can test your tools:

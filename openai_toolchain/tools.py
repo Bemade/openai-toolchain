@@ -237,28 +237,42 @@ class ToolRegistry:
         """
         return self._tools.get(name)
 
-    def call_tool(self, name: str, arguments: Dict[str, Any]) -> Any:
+    def call_tool(
+        self,
+        name: str,
+        arguments: Dict[str, Any],
+        non_ai_params: Optional[Dict[str, Any]] = None,
+    ) -> Any:
         """Call a registered tool by name with the given arguments.
 
         This method executes a registered tool with the provided arguments and
         returns the result.
 
         Args:
-            name (str): The name of the tool to call.
-            arguments (dict): A dictionary of arguments to pass to the tool.
+            name: The name of the tool to call.
+            arguments: A dictionary of arguments to pass to the tool.
+            non_ai_params: Optional dictionary of non-AI parameters to pass to the tool.
+                These parameters are not part of the AI's function calling interface
+                but can be used to pass system-level dependencies.
+
 
         Returns:
-            Any: The result of the tool execution.
+            The result of the tool execution.
 
         Raises:
             ToolError: If the tool is not found or if there's an error during execution.
         """
+        if non_ai_params is None:
+            non_ai_params = {}
+
         tool = self.get_tool(name)
         if not tool:
             raise ToolError(f"Tool '{name}' not found")
 
         try:
-            return tool["function"](**arguments)
+            # Merge non_ai_params with the arguments
+            kwargs = {**arguments, **non_ai_params}
+            return tool["function"](**kwargs)
         except Exception as e:
             raise ToolError(f"Error calling tool '{name}': {e}") from e
 

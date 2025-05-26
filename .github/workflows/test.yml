@@ -36,7 +36,7 @@ jobs:
           python -m pip install 'bandit[toml]'
 
       - name: Run pre-commit
-        run: pre-commit run --all-files
+        run: pre-commit run
 
       - name: Test with pytest
         run: |

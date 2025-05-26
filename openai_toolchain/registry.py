@@ -37,6 +37,7 @@ class ToolRegistry:
         *,
         name: Optional[str] = None,
         description: Optional[str] = None,
+        non_ai_params: Optional[List[str]] = None,
         **kwargs: Any,
     ) -> Union[Callable[[T], T], T]:
         """Register a function as a tool.
@@ -57,6 +58,19 @@ class ToolRegistry:
             tool_name = name or f.__name__
             tool_description = description or (f.__doc__ or "").strip()
 
+            # Initialize local non_ai_params list
+            local_non_ai_params = (
+                non_ai_params.copy() if non_ai_params is not None else []
+            )
+
+            if local_non_ai_params:
+                non_ai_param_joined = "\\n- ".join(local_non_ai_params)
+                tool_description += f"""
+
+                Non-AI parameters (do not use these):
+                {non_ai_param_joined}
+                """
+
             # Extract parameter information
             sig = inspect.signature(f)
             parameters: Dict[str, Any] = {}
@@ -64,7 +78,7 @@ class ToolRegistry:
             type_hints = get_type_hints(f)
 
             for param_name, param in sig.parameters.items():
-                if param_name == "self":
+                if param_name == "self" or param_name in local_non_ai_params:
                     continue
 
                 param_type = type_hints.get(param_name, str)
