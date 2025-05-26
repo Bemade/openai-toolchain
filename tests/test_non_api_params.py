@@ -42,7 +42,6 @@ class WeatherDatabase(BaseModel):
 
 
 class WeatherBot:
-
     def get_weather(
         self,
         weather_db: WeatherDatabase,
