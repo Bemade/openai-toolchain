@@ -112,6 +112,9 @@ warn_unreachable = true
 strict_equality = true
 no_implicit_optional = true
 
+# Exclude generated _version.py and its type stub
+exclude = "^openai_toolchain/_version\\.pyi?$"
+
 # Ignore missing imports for specific modules
 [[tool.mypy.overrides]]
 module = [
