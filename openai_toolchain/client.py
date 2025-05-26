@@ -125,10 +125,15 @@ class OpenAIClient:
         self,
         messages: Sequence[MessageDict],
         tools: Optional[Sequence[str]] = None,
+        tool_params: Optional[Dict[str, Dict[str, Any]]] = None,
         model: Optional[str] = None,
         max_tool_calls: int = 5,
         **kwargs: Any,
     ) -> str:
+        # Initialize tool_params if not provided
+        if tool_params is None:
+            tool_params = {}
+
         # Convert messages to a list for mutation
         conversation: List[MessageDict] = list(messages)
         """Send a chat completion request and handle tool calls automatically.
@@ -179,12 +184,14 @@ class OpenAIClient:
             tool_call_count += 1
             for tool_call in message.tool_calls:
                 function = tool_call.function
+                non_ai_params = tool_params.get(function.name, {})
 
                 # Execute the tool
                 try:
                     result = tool_registry.call_tool(
                         function.name,
                         json.loads(function.arguments),
+                        non_ai_params=non_ai_params,
                     )
                     result_str = (
                         json.dumps(result) if not isinstance(result, str) else result

@@ -186,10 +186,49 @@ Register a function as a tool:
 ```python
 from openai_toolchain import tool
 
+# Basic usage
 @tool
 def my_function(param: str) -> str:
     """Function documentation."""
     return f"Result for {param}"
+
+# With non-AI parameters
+@tool(non_ai_params=["db_connection"])
+def get_data(query: str, db_connection: Database) -> str:
+    """Get data from the database.
+    
+    Args:
+        query: The search query
+        db_connection: Database connection (handled by the system, not AI)
+    """
+    return db_connection.execute(query)
+```
+
+#### Non-AI Parameters
+
+You can mark certain parameters as non-AI parameters, which means they will be provided by the system rather than the AI. This is useful for passing in dependencies like database connections, configuration, or other runtime objects.
+
+1. Specify non-AI parameters using the `non_ai_params` argument in the `@tool` decorator
+2. These parameters will be excluded from the AI's schema
+3. You must provide these parameters when calling `chat_with_tools` using the `tool_params` argument
+
+Example usage with `chat_with_tools`:
+
+```python
+# Initialize client and dependencies
+client = OpenAIClient(api_key="your-api-key")
+db = DatabaseConnection()
+
+# Call with non-AI parameters
+response = client.chat_with_tools(
+    messages=[{"role": "user", "content": "Get me user data for John"}],
+    tools=["get_data"],
+    tool_params={
+        "get_data": {
+            "db_connection": db
+        }
+    }
+)
 ```
 
 ### `tool_registry`

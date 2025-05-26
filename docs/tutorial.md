@@ -82,6 +82,54 @@ def get_weather_with_deps(location: str) -> str:
     return fetch_weather(location)
 ```
 
+## Using Non-AI Parameters
+
+Non-AI parameters allow you to pass system-level dependencies (like database connections or configuration) to your tools without exposing them to the AI. Here's how to use them:
+
+### 1. Define a Tool with Non-AI Parameters
+
+```python
+@tool(non_ai_params=["config"])
+def get_config_value(key: str, config: dict) -> str:
+    """Get a value from the configuration.
+
+    Args:
+        key: The configuration key to retrieve
+        config: The configuration dictionary (handled by the system)
+    """
+    return config.get(key, "Key not found")
+```
+
+### 2. Use the Tool with Non-AI Parameters
+
+```python
+# System configuration
+app_config = {
+    "api_key": "secret-key-123",
+    "environment": "production",
+    "max_retries": 3
+}
+
+# Pass the configuration when calling the tool
+response = client.chat_with_tools(
+    messages=[{"role": "user", "content": "What's the API environment?"}],
+    tools=["get_config_value"],
+    tool_params={
+        "get_config_value": {
+            "config": app_config
+        }
+    }
+)
+```
+
+### Benefits of Non-AI Parameters
+
+- **Runtime Context**: Non-AI parameters allow you to pass system-level dependencies (like database connections or configuration) to your tools without exposing them to the AI.
+- **Security**: Keep sensitive information out of AI prompts
+- **Performance**: Avoid serializing/deserializing large objects
+- **Control**: Maintain system-level control over certain parameters
+- **Flexibility**: Easily swap implementations without changing tool logic
+
 ## Best Practices
 
 1. **Document Your Tools**: Always include docstrings with clear parameter and
@@ -90,6 +138,7 @@ def get_weather_with_deps(location: str) -> str:
 3. **Type Hints**: Use Python type hints for better AI tool calling, IDE support
    and documentation.
 4. **Testing**: Write tests for your tools to ensure they work as expected.
+5. **Non-AI Parameters**: Use non-AI parameters for system dependencies and sensitive data.
 
 ## Next Steps
 
