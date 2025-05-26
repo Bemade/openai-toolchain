@@ -91,6 +91,7 @@ def test_non_api_params(tool_registry: Any) -> None:
                 "weather_db": weather_db,
             }
         },
+        max_tool_calls=10,
     )
 
     assert response is not None
