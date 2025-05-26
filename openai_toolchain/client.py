@@ -19,6 +19,8 @@ from openai.types.chat import ChatCompletion, ChatCompletionMessageParam
 
 from .tools import tool_registry
 
+_logger = logging.getLogger(__name__)
+
 
 # Define custom types for better type checking
 class MessageDict(TypedDict, total=False):
@@ -164,8 +166,23 @@ class OpenAIClient:
             if not tools or tool.get("function", {}).get("name") in tools
         ]
 
+        _logger.debug("Starting chat with tools")
+        _logger.debug(
+            f"Available tools: {[t['function']['name'] for t in tool_schemas] if tool_schemas else 'None'}"
+        )
+        _logger.debug(f"Initial messages: {conversation}")
+
         while tool_call_count < max_tool_calls:
             # Get the next response from the model
+            _logger.debug(
+                f"Sending request to model (attempt {tool_call_count + 1}/{max_tool_calls})"
+            )
+            _logger.debug(f"Messages: {conversation}")
+            _logger.debug(f"Using model: {model or self.default_model}")
+            _logger.debug(
+                f"Tools: {json.dumps(tool_schemas, indent=4)} if tool_schemas else 'None'"
+            )
+
             response = self.chat(
                 conversation,
                 model=model or self.default_model,
@@ -174,20 +191,32 @@ class OpenAIClient:
                 **kwargs,
             )
 
+            _logger.debug(f"Received response: {response}")
+
             message = response.choices[0].message
 
             # If there are no tool calls, we're done
             if not hasattr(message, "tool_calls") or not message.tool_calls:
+                _logger.debug("No tool calls in response, ending conversation")
                 return message.content or ""
 
             # Process tool calls
             tool_call_count += 1
+            _logger.debug(f"Processing tool call {tool_call_count}/{max_tool_calls}")
+
             for tool_call in message.tool_calls:
                 function = tool_call.function
                 non_ai_params = tool_params.get(function.name, {})
+                _logger.debug(f"Calling tool: {function.name}")
+                _logger.debug(f"Arguments: {function.arguments}")
+                if non_ai_params:
+                    _logger.debug(f"Non-AI parameters: {non_ai_params}")
 
                 # Execute the tool
                 try:
+                    _logger.debug(
+                        f"Calling tool: {function.name} with args: {function.arguments}"
+                    )
                     result = tool_registry.call_tool(
                         function.name,
                         json.loads(function.arguments),
@@ -196,8 +225,16 @@ class OpenAIClient:
                     result_str = (
                         json.dumps(result) if not isinstance(result, str) else result
                     )
+                    _logger.debug(
+                        f"Tool {function.name} returned: {result_str[:200]}..."
+                        if len(str(result_str)) > 200
+                        else f"Tool {function.name} returned: {result_str}"
+                    )
                 except Exception as e:
                     result_str = f"Error: {e!s}"
+                    _logger.error(
+                        f"Error calling tool {function.name}: {e}", exc_info=True
+                    )
 
                 # Add the tool response to the conversation
                 conversation.append(

@@ -18,7 +18,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from openai_toolchain.client import OpenAIClient
 
 # Set up logging
-logging.basicConfig(level=logging.INFO)
 _logger = logging.getLogger(__name__)
 
 # Skip if we don't have the required environment variables

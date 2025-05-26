@@ -12,8 +12,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from openai_toolchain import OpenAIClient
 
 # Set up logging
-logging.basicConfig(level=logging.INFO)
 _logger = logging.getLogger(__name__)
+client_logger = logging.getLogger("openai_toolchain.client")
+client_logger.setLevel(logging.DEBUG)
 
 # Skip if we don't have the required environment variables
 pytestmark = pytest.mark.skipif(
