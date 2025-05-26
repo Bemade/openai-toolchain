@@ -565,6 +565,48 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#using-non-ai-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Non-AI Parameters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using Non-AI Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-define-a-tool-with-non-ai-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Define a Tool with Non-AI Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-use-the-tool-with-non-ai-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Use the Tool with Non-AI Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits-of-non-ai-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits of Non-AI Parameters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#best-practices" class="md-nav__link">
     <span class="md-ellipsis">
       Best Practices
@@ -767,6 +809,48 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#using-non-ai-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Non-AI Parameters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using Non-AI Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-define-a-tool-with-non-ai-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Define a Tool with Non-AI Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-use-the-tool-with-non-ai-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Use the Tool with Non-AI Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits-of-non-ai-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits of Non-AI Parameters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#best-practices" class="md-nav__link">
     <span class="md-ellipsis">
       Best Practices
@@ -865,6 +949,46 @@ OpenAI function tools.</p>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">some_weather_lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_weather</span> <span class="k">as</span> <span class="n">fetch_weather</span>
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="k">return</span> <span class="n">fetch_weather</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
 </code></pre></div>
+<h2 id="using-non-ai-parameters">Using Non-AI Parameters</h2>
+<p>Non-AI parameters allow you to pass system-level dependencies (like database connections or configuration) to your tools without exposing them to the AI. Here's how to use them:</p>
+<h3 id="1-define-a-tool-with-non-ai-parameters">1. Define a Tool with Non-AI Parameters</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nd">@tool</span><span class="p">(</span><span class="n">non_ai_params</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">])</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_config_value</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a value from the configuration.</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="sd">    Args:</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="sd">        key: The configuration key to retrieve</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="sd">        config: The configuration dictionary (handled by the system)</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    <span class="k">return</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;Key not found&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="2-use-the-tool-with-non-ai-parameters">2. Use the Tool with Non-AI Parameters</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># System configuration</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">app_config</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="s2">&quot;api_key&quot;</span><span class="p">:</span> <span class="s2">&quot;secret-key-123&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="s2">&quot;production&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="s2">&quot;max_retries&quot;</span><span class="p">:</span> <span class="mi">3</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="p">}</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1"># Pass the configuration when calling the tool</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat_with_tools</span><span class="p">(</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;What&#39;s the API environment?&quot;</span><span class="p">}],</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;get_config_value&quot;</span><span class="p">],</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="n">tool_params</span><span class="o">=</span><span class="p">{</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>        <span class="s2">&quot;get_config_value&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>            <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="n">app_config</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>        <span class="p">}</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>    <span class="p">}</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="benefits-of-non-ai-parameters">Benefits of Non-AI Parameters</h3>
+<ul>
+<li><strong>Runtime Context</strong>: Non-AI parameters allow you to pass system-level dependencies (like database connections or configuration) to your tools without exposing them to the AI.</li>
+<li><strong>Security</strong>: Keep sensitive information out of AI prompts</li>
+<li><strong>Performance</strong>: Avoid serializing/deserializing large objects</li>
+<li><strong>Control</strong>: Maintain system-level control over certain parameters</li>
+<li><strong>Flexibility</strong>: Easily swap implementations without changing tool logic</li>
+</ul>
 <h2 id="best-practices">Best Practices</h2>
 <ol>
 <li><strong>Document Your Tools</strong>: Always include docstrings with clear parameter and
@@ -873,6 +997,7 @@ OpenAI function tools.</p>
 <li><strong>Type Hints</strong>: Use Python type hints for better AI tool calling, IDE support
    and documentation.</li>
 <li><strong>Testing</strong>: Write tests for your tools to ensure they work as expected.</li>
+<li><strong>Non-AI Parameters</strong>: Use non-AI parameters for system dependencies and sensitive data.</li>
 </ol>
 <h2 id="next-steps">Next Steps</h2>
 <ul>

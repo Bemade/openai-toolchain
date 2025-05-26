@@ -1029,7 +1029,21 @@ schema generation, and tool execution.</p>
 <span class="normal"><a href="#__codelineno-0-298">298</a></span>
 <span class="normal"><a href="#__codelineno-0-299">299</a></span>
 <span class="normal"><a href="#__codelineno-0-300">300</a></span>
-<span class="normal"><a href="#__codelineno-0-301">301</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="k">class</span><span class="w"> </span><span class="nc">ToolRegistry</span><span class="p">:</span>
+<span class="normal"><a href="#__codelineno-0-301">301</a></span>
+<span class="normal"><a href="#__codelineno-0-302">302</a></span>
+<span class="normal"><a href="#__codelineno-0-303">303</a></span>
+<span class="normal"><a href="#__codelineno-0-304">304</a></span>
+<span class="normal"><a href="#__codelineno-0-305">305</a></span>
+<span class="normal"><a href="#__codelineno-0-306">306</a></span>
+<span class="normal"><a href="#__codelineno-0-307">307</a></span>
+<span class="normal"><a href="#__codelineno-0-308">308</a></span>
+<span class="normal"><a href="#__codelineno-0-309">309</a></span>
+<span class="normal"><a href="#__codelineno-0-310">310</a></span>
+<span class="normal"><a href="#__codelineno-0-311">311</a></span>
+<span class="normal"><a href="#__codelineno-0-312">312</a></span>
+<span class="normal"><a href="#__codelineno-0-313">313</a></span>
+<span class="normal"><a href="#__codelineno-0-314">314</a></span>
+<span class="normal"><a href="#__codelineno-0-315">315</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="k">class</span><span class="w"> </span><span class="nc">ToolRegistry</span><span class="p">:</span>
 <a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Registry for AI tools with automatic schema generation.</span>
 <a id="__codelineno-0-37" name="__codelineno-0-37"></a>
 <a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="sd">    This class implements a singleton pattern to maintain a global registry</span>
@@ -1234,68 +1248,82 @@ schema generation, and tool execution.</p>
 <a id="__codelineno-0-237" name="__codelineno-0-237"></a><span class="sd">        &quot;&quot;&quot;</span>
 <a id="__codelineno-0-238" name="__codelineno-0-238"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tools</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 <a id="__codelineno-0-239" name="__codelineno-0-239"></a>
-<a id="__codelineno-0-240" name="__codelineno-0-240"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">call_tool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">arguments</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<a id="__codelineno-0-241" name="__codelineno-0-241"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a registered tool by name with the given arguments.</span>
-<a id="__codelineno-0-242" name="__codelineno-0-242"></a>
-<a id="__codelineno-0-243" name="__codelineno-0-243"></a><span class="sd">        This method executes a registered tool with the provided arguments and</span>
-<a id="__codelineno-0-244" name="__codelineno-0-244"></a><span class="sd">        returns the result.</span>
-<a id="__codelineno-0-245" name="__codelineno-0-245"></a>
-<a id="__codelineno-0-246" name="__codelineno-0-246"></a><span class="sd">        Args:</span>
-<a id="__codelineno-0-247" name="__codelineno-0-247"></a><span class="sd">            name (str): The name of the tool to call.</span>
-<a id="__codelineno-0-248" name="__codelineno-0-248"></a><span class="sd">            arguments (dict): A dictionary of arguments to pass to the tool.</span>
-<a id="__codelineno-0-249" name="__codelineno-0-249"></a>
-<a id="__codelineno-0-250" name="__codelineno-0-250"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-251" name="__codelineno-0-251"></a><span class="sd">            Any: The result of the tool execution.</span>
-<a id="__codelineno-0-252" name="__codelineno-0-252"></a>
-<a id="__codelineno-0-253" name="__codelineno-0-253"></a><span class="sd">        Raises:</span>
-<a id="__codelineno-0-254" name="__codelineno-0-254"></a><span class="sd">            ToolError: If the tool is not found or if there&#39;s an error during execution.</span>
-<a id="__codelineno-0-255" name="__codelineno-0-255"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-256" name="__codelineno-0-256"></a>        <span class="n">tool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tool</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-<a id="__codelineno-0-257" name="__codelineno-0-257"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">tool</span><span class="p">:</span>
-<a id="__codelineno-0-258" name="__codelineno-0-258"></a>            <span class="k">raise</span> <span class="n">ToolError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tool &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; not found&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-259" name="__codelineno-0-259"></a>
-<a id="__codelineno-0-260" name="__codelineno-0-260"></a>        <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-0-261" name="__codelineno-0-261"></a>            <span class="k">return</span> <span class="n">tool</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">](</span><span class="o">**</span><span class="n">arguments</span><span class="p">)</span>
-<a id="__codelineno-0-262" name="__codelineno-0-262"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-0-263" name="__codelineno-0-263"></a>            <span class="k">raise</span> <span class="n">ToolError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error calling tool &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
-<a id="__codelineno-0-264" name="__codelineno-0-264"></a>
-<a id="__codelineno-0-265" name="__codelineno-0-265"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_openai_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-<a id="__codelineno-0-266" name="__codelineno-0-266"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets all registered tools in OpenAI function calling format.</span>
+<a id="__codelineno-0-240" name="__codelineno-0-240"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">call_tool</span><span class="p">(</span>
+<a id="__codelineno-0-241" name="__codelineno-0-241"></a>        <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-242" name="__codelineno-0-242"></a>        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-243" name="__codelineno-0-243"></a>        <span class="n">arguments</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+<a id="__codelineno-0-244" name="__codelineno-0-244"></a>        <span class="n">non_ai_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-245" name="__codelineno-0-245"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<a id="__codelineno-0-246" name="__codelineno-0-246"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a registered tool by name with the given arguments.</span>
+<a id="__codelineno-0-247" name="__codelineno-0-247"></a>
+<a id="__codelineno-0-248" name="__codelineno-0-248"></a><span class="sd">        This method executes a registered tool with the provided arguments and</span>
+<a id="__codelineno-0-249" name="__codelineno-0-249"></a><span class="sd">        returns the result.</span>
+<a id="__codelineno-0-250" name="__codelineno-0-250"></a>
+<a id="__codelineno-0-251" name="__codelineno-0-251"></a><span class="sd">        Args:</span>
+<a id="__codelineno-0-252" name="__codelineno-0-252"></a><span class="sd">            name: The name of the tool to call.</span>
+<a id="__codelineno-0-253" name="__codelineno-0-253"></a><span class="sd">            arguments: A dictionary of arguments to pass to the tool.</span>
+<a id="__codelineno-0-254" name="__codelineno-0-254"></a><span class="sd">            non_ai_params: Optional dictionary of non-AI parameters to pass to the tool.</span>
+<a id="__codelineno-0-255" name="__codelineno-0-255"></a><span class="sd">                These parameters are not part of the AI&#39;s function calling interface</span>
+<a id="__codelineno-0-256" name="__codelineno-0-256"></a><span class="sd">                but can be used to pass system-level dependencies.</span>
+<a id="__codelineno-0-257" name="__codelineno-0-257"></a>
+<a id="__codelineno-0-258" name="__codelineno-0-258"></a>
+<a id="__codelineno-0-259" name="__codelineno-0-259"></a><span class="sd">        Returns:</span>
+<a id="__codelineno-0-260" name="__codelineno-0-260"></a><span class="sd">            The result of the tool execution.</span>
+<a id="__codelineno-0-261" name="__codelineno-0-261"></a>
+<a id="__codelineno-0-262" name="__codelineno-0-262"></a><span class="sd">        Raises:</span>
+<a id="__codelineno-0-263" name="__codelineno-0-263"></a><span class="sd">            ToolError: If the tool is not found or if there&#39;s an error during execution.</span>
+<a id="__codelineno-0-264" name="__codelineno-0-264"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-265" name="__codelineno-0-265"></a>        <span class="k">if</span> <span class="n">non_ai_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-266" name="__codelineno-0-266"></a>            <span class="n">non_ai_params</span> <span class="o">=</span> <span class="p">{}</span>
 <a id="__codelineno-0-267" name="__codelineno-0-267"></a>
-<a id="__codelineno-0-268" name="__codelineno-0-268"></a><span class="sd">        This method converts all registered tools to the format expected by the</span>
-<a id="__codelineno-0-269" name="__codelineno-0-269"></a><span class="sd">        OpenAI API for function calling. The resulting list can be passed directly</span>
-<a id="__codelineno-0-270" name="__codelineno-0-270"></a><span class="sd">        to the OpenAI API&#39;s `tools` parameter.</span>
+<a id="__codelineno-0-268" name="__codelineno-0-268"></a>        <span class="n">tool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tool</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<a id="__codelineno-0-269" name="__codelineno-0-269"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">tool</span><span class="p">:</span>
+<a id="__codelineno-0-270" name="__codelineno-0-270"></a>            <span class="k">raise</span> <span class="n">ToolError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tool &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; not found&quot;</span><span class="p">)</span>
 <a id="__codelineno-0-271" name="__codelineno-0-271"></a>
-<a id="__codelineno-0-272" name="__codelineno-0-272"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-273" name="__codelineno-0-273"></a><span class="sd">            list: A list of tools in OpenAI function calling format. Each tool is a</span>
-<a id="__codelineno-0-274" name="__codelineno-0-274"></a><span class="sd">                dictionary with &#39;type&#39; and &#39;function&#39; keys, where &#39;function&#39;</span>
-<a id="__codelineno-0-275" name="__codelineno-0-275"></a><span class="sd">                contains the tool&#39;s name, description, and parameters schema.</span>
-<a id="__codelineno-0-276" name="__codelineno-0-276"></a>
-<a id="__codelineno-0-277" name="__codelineno-0-277"></a><span class="sd">        Example:</span>
-<a id="__codelineno-0-278" name="__codelineno-0-278"></a><span class="sd">            &gt;&gt;&gt; @tool_registry.register</span>
-<a id="__codelineno-0-279" name="__codelineno-0-279"></a><span class="sd">            ... def get_weather(location: str) -&gt; str:</span>
-<a id="__codelineno-0-280" name="__codelineno-0-280"></a><span class="sd">            ...     return f&quot;Weather in {location}: Sunny&quot;</span>
-<a id="__codelineno-0-281" name="__codelineno-0-281"></a><span class="sd">            &gt;&gt;&gt; tools = tool_registry.get_openai_tools()</span>
-<a id="__codelineno-0-282" name="__codelineno-0-282"></a><span class="sd">            &gt;&gt;&gt; print(tools[0][&#39;function&#39;][&#39;name&#39;])</span>
-<a id="__codelineno-0-283" name="__codelineno-0-283"></a><span class="sd">            get_weather</span>
-<a id="__codelineno-0-284" name="__codelineno-0-284"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-285" name="__codelineno-0-285"></a>        <span class="n">tools</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="__codelineno-0-286" name="__codelineno-0-286"></a>        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">tool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tools</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<a id="__codelineno-0-287" name="__codelineno-0-287"></a>            <span class="n">tools</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-<a id="__codelineno-0-288" name="__codelineno-0-288"></a>                <span class="p">{</span>
-<a id="__codelineno-0-289" name="__codelineno-0-289"></a>                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-290" name="__codelineno-0-290"></a>                    <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="p">{</span>
-<a id="__codelineno-0-291" name="__codelineno-0-291"></a>                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
-<a id="__codelineno-0-292" name="__codelineno-0-292"></a>                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">tool</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
-<a id="__codelineno-0-293" name="__codelineno-0-293"></a>                        <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="n">tool</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span>
-<a id="__codelineno-0-294" name="__codelineno-0-294"></a>                    <span class="p">},</span>
-<a id="__codelineno-0-295" name="__codelineno-0-295"></a>                <span class="p">},</span>
-<a id="__codelineno-0-296" name="__codelineno-0-296"></a>            <span class="p">)</span>
-<a id="__codelineno-0-297" name="__codelineno-0-297"></a>        <span class="k">return</span> <span class="n">tools</span>
-<a id="__codelineno-0-298" name="__codelineno-0-298"></a>
-<a id="__codelineno-0-299" name="__codelineno-0-299"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-300" name="__codelineno-0-300"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clears all registered tools.&quot;&quot;&quot;</span>
-<a id="__codelineno-0-301" name="__codelineno-0-301"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_tools</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<a id="__codelineno-0-272" name="__codelineno-0-272"></a>        <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-0-273" name="__codelineno-0-273"></a>            <span class="c1"># Merge non_ai_params with the arguments</span>
+<a id="__codelineno-0-274" name="__codelineno-0-274"></a>            <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">arguments</span><span class="p">,</span> <span class="o">**</span><span class="n">non_ai_params</span><span class="p">}</span>
+<a id="__codelineno-0-275" name="__codelineno-0-275"></a>            <span class="k">return</span> <span class="n">tool</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">](</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="__codelineno-0-276" name="__codelineno-0-276"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-0-277" name="__codelineno-0-277"></a>            <span class="k">raise</span> <span class="n">ToolError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error calling tool &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+<a id="__codelineno-0-278" name="__codelineno-0-278"></a>
+<a id="__codelineno-0-279" name="__codelineno-0-279"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_openai_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<a id="__codelineno-0-280" name="__codelineno-0-280"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets all registered tools in OpenAI function calling format.</span>
+<a id="__codelineno-0-281" name="__codelineno-0-281"></a>
+<a id="__codelineno-0-282" name="__codelineno-0-282"></a><span class="sd">        This method converts all registered tools to the format expected by the</span>
+<a id="__codelineno-0-283" name="__codelineno-0-283"></a><span class="sd">        OpenAI API for function calling. The resulting list can be passed directly</span>
+<a id="__codelineno-0-284" name="__codelineno-0-284"></a><span class="sd">        to the OpenAI API&#39;s `tools` parameter.</span>
+<a id="__codelineno-0-285" name="__codelineno-0-285"></a>
+<a id="__codelineno-0-286" name="__codelineno-0-286"></a><span class="sd">        Returns:</span>
+<a id="__codelineno-0-287" name="__codelineno-0-287"></a><span class="sd">            list: A list of tools in OpenAI function calling format. Each tool is a</span>
+<a id="__codelineno-0-288" name="__codelineno-0-288"></a><span class="sd">                dictionary with &#39;type&#39; and &#39;function&#39; keys, where &#39;function&#39;</span>
+<a id="__codelineno-0-289" name="__codelineno-0-289"></a><span class="sd">                contains the tool&#39;s name, description, and parameters schema.</span>
+<a id="__codelineno-0-290" name="__codelineno-0-290"></a>
+<a id="__codelineno-0-291" name="__codelineno-0-291"></a><span class="sd">        Example:</span>
+<a id="__codelineno-0-292" name="__codelineno-0-292"></a><span class="sd">            &gt;&gt;&gt; @tool_registry.register</span>
+<a id="__codelineno-0-293" name="__codelineno-0-293"></a><span class="sd">            ... def get_weather(location: str) -&gt; str:</span>
+<a id="__codelineno-0-294" name="__codelineno-0-294"></a><span class="sd">            ...     return f&quot;Weather in {location}: Sunny&quot;</span>
+<a id="__codelineno-0-295" name="__codelineno-0-295"></a><span class="sd">            &gt;&gt;&gt; tools = tool_registry.get_openai_tools()</span>
+<a id="__codelineno-0-296" name="__codelineno-0-296"></a><span class="sd">            &gt;&gt;&gt; print(tools[0][&#39;function&#39;][&#39;name&#39;])</span>
+<a id="__codelineno-0-297" name="__codelineno-0-297"></a><span class="sd">            get_weather</span>
+<a id="__codelineno-0-298" name="__codelineno-0-298"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-299" name="__codelineno-0-299"></a>        <span class="n">tools</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-300" name="__codelineno-0-300"></a>        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">tool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tools</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-0-301" name="__codelineno-0-301"></a>            <span class="n">tools</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<a id="__codelineno-0-302" name="__codelineno-0-302"></a>                <span class="p">{</span>
+<a id="__codelineno-0-303" name="__codelineno-0-303"></a>                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-304" name="__codelineno-0-304"></a>                    <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-0-305" name="__codelineno-0-305"></a>                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+<a id="__codelineno-0-306" name="__codelineno-0-306"></a>                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">tool</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
+<a id="__codelineno-0-307" name="__codelineno-0-307"></a>                        <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="n">tool</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span>
+<a id="__codelineno-0-308" name="__codelineno-0-308"></a>                    <span class="p">},</span>
+<a id="__codelineno-0-309" name="__codelineno-0-309"></a>                <span class="p">},</span>
+<a id="__codelineno-0-310" name="__codelineno-0-310"></a>            <span class="p">)</span>
+<a id="__codelineno-0-311" name="__codelineno-0-311"></a>        <span class="k">return</span> <span class="n">tools</span>
+<a id="__codelineno-0-312" name="__codelineno-0-312"></a>
+<a id="__codelineno-0-313" name="__codelineno-0-313"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-314" name="__codelineno-0-314"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clears all registered tools.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-315" name="__codelineno-0-315"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_tools</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -1379,7 +1407,7 @@ schema generation, and tool execution.</p>
 
 
 <h4 id="openai_toolchain.tools.ToolRegistry.call_tool" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">call_tool</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">call_tool</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">non_ai_params</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h4>
 
@@ -1423,7 +1451,7 @@ returns the result.</p>
                 <code>arguments</code>
             </td>
             <td>
-                  <code><span title="dict">dict</span></code>
+                  <code><span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1434,6 +1462,24 @@ returns the result.</p>
                 <em>required</em>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>non_ai_params</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional dictionary of non-AI parameters to pass to the tool.
+These parameters are not part of the AI's function calling interface
+but can be used to pass system-level dependencies.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
       </tbody>
     </table>
 
@@ -1442,13 +1488,13 @@ returns the result.</p>
     <table>
       <thead>
         <tr>
-<th>Name</th>          <th>Type</th>
+          <th>Type</th>
           <th>Description</th>
         </tr>
       </thead>
       <tbody>
           <tr class="doc-section-item">
-<td><code>Any</code></td>            <td>
+            <td>
                   <code><span title="typing.Any">Any</span></code>
             </td>
             <td>
@@ -1509,30 +1555,58 @@ returns the result.</p>
 <span class="normal"><a href="#__codelineno-0-260">260</a></span>
 <span class="normal"><a href="#__codelineno-0-261">261</a></span>
 <span class="normal"><a href="#__codelineno-0-262">262</a></span>
-<span class="normal"><a href="#__codelineno-0-263">263</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-240" name="__codelineno-0-240"></a><span class="k">def</span><span class="w"> </span><span class="nf">call_tool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">arguments</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<a id="__codelineno-0-241" name="__codelineno-0-241"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Call a registered tool by name with the given arguments.</span>
-<a id="__codelineno-0-242" name="__codelineno-0-242"></a>
-<a id="__codelineno-0-243" name="__codelineno-0-243"></a><span class="sd">    This method executes a registered tool with the provided arguments and</span>
-<a id="__codelineno-0-244" name="__codelineno-0-244"></a><span class="sd">    returns the result.</span>
-<a id="__codelineno-0-245" name="__codelineno-0-245"></a>
-<a id="__codelineno-0-246" name="__codelineno-0-246"></a><span class="sd">    Args:</span>
-<a id="__codelineno-0-247" name="__codelineno-0-247"></a><span class="sd">        name (str): The name of the tool to call.</span>
-<a id="__codelineno-0-248" name="__codelineno-0-248"></a><span class="sd">        arguments (dict): A dictionary of arguments to pass to the tool.</span>
-<a id="__codelineno-0-249" name="__codelineno-0-249"></a>
-<a id="__codelineno-0-250" name="__codelineno-0-250"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-251" name="__codelineno-0-251"></a><span class="sd">        Any: The result of the tool execution.</span>
-<a id="__codelineno-0-252" name="__codelineno-0-252"></a>
-<a id="__codelineno-0-253" name="__codelineno-0-253"></a><span class="sd">    Raises:</span>
-<a id="__codelineno-0-254" name="__codelineno-0-254"></a><span class="sd">        ToolError: If the tool is not found or if there&#39;s an error during execution.</span>
-<a id="__codelineno-0-255" name="__codelineno-0-255"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-256" name="__codelineno-0-256"></a>    <span class="n">tool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tool</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-<a id="__codelineno-0-257" name="__codelineno-0-257"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">tool</span><span class="p">:</span>
-<a id="__codelineno-0-258" name="__codelineno-0-258"></a>        <span class="k">raise</span> <span class="n">ToolError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tool &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; not found&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-259" name="__codelineno-0-259"></a>
-<a id="__codelineno-0-260" name="__codelineno-0-260"></a>    <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-0-261" name="__codelineno-0-261"></a>        <span class="k">return</span> <span class="n">tool</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">](</span><span class="o">**</span><span class="n">arguments</span><span class="p">)</span>
-<a id="__codelineno-0-262" name="__codelineno-0-262"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-0-263" name="__codelineno-0-263"></a>        <span class="k">raise</span> <span class="n">ToolError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error calling tool &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+<span class="normal"><a href="#__codelineno-0-263">263</a></span>
+<span class="normal"><a href="#__codelineno-0-264">264</a></span>
+<span class="normal"><a href="#__codelineno-0-265">265</a></span>
+<span class="normal"><a href="#__codelineno-0-266">266</a></span>
+<span class="normal"><a href="#__codelineno-0-267">267</a></span>
+<span class="normal"><a href="#__codelineno-0-268">268</a></span>
+<span class="normal"><a href="#__codelineno-0-269">269</a></span>
+<span class="normal"><a href="#__codelineno-0-270">270</a></span>
+<span class="normal"><a href="#__codelineno-0-271">271</a></span>
+<span class="normal"><a href="#__codelineno-0-272">272</a></span>
+<span class="normal"><a href="#__codelineno-0-273">273</a></span>
+<span class="normal"><a href="#__codelineno-0-274">274</a></span>
+<span class="normal"><a href="#__codelineno-0-275">275</a></span>
+<span class="normal"><a href="#__codelineno-0-276">276</a></span>
+<span class="normal"><a href="#__codelineno-0-277">277</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-240" name="__codelineno-0-240"></a><span class="k">def</span><span class="w"> </span><span class="nf">call_tool</span><span class="p">(</span>
+<a id="__codelineno-0-241" name="__codelineno-0-241"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-242" name="__codelineno-0-242"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-243" name="__codelineno-0-243"></a>    <span class="n">arguments</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+<a id="__codelineno-0-244" name="__codelineno-0-244"></a>    <span class="n">non_ai_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-245" name="__codelineno-0-245"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<a id="__codelineno-0-246" name="__codelineno-0-246"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Call a registered tool by name with the given arguments.</span>
+<a id="__codelineno-0-247" name="__codelineno-0-247"></a>
+<a id="__codelineno-0-248" name="__codelineno-0-248"></a><span class="sd">    This method executes a registered tool with the provided arguments and</span>
+<a id="__codelineno-0-249" name="__codelineno-0-249"></a><span class="sd">    returns the result.</span>
+<a id="__codelineno-0-250" name="__codelineno-0-250"></a>
+<a id="__codelineno-0-251" name="__codelineno-0-251"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-252" name="__codelineno-0-252"></a><span class="sd">        name: The name of the tool to call.</span>
+<a id="__codelineno-0-253" name="__codelineno-0-253"></a><span class="sd">        arguments: A dictionary of arguments to pass to the tool.</span>
+<a id="__codelineno-0-254" name="__codelineno-0-254"></a><span class="sd">        non_ai_params: Optional dictionary of non-AI parameters to pass to the tool.</span>
+<a id="__codelineno-0-255" name="__codelineno-0-255"></a><span class="sd">            These parameters are not part of the AI&#39;s function calling interface</span>
+<a id="__codelineno-0-256" name="__codelineno-0-256"></a><span class="sd">            but can be used to pass system-level dependencies.</span>
+<a id="__codelineno-0-257" name="__codelineno-0-257"></a>
+<a id="__codelineno-0-258" name="__codelineno-0-258"></a>
+<a id="__codelineno-0-259" name="__codelineno-0-259"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-260" name="__codelineno-0-260"></a><span class="sd">        The result of the tool execution.</span>
+<a id="__codelineno-0-261" name="__codelineno-0-261"></a>
+<a id="__codelineno-0-262" name="__codelineno-0-262"></a><span class="sd">    Raises:</span>
+<a id="__codelineno-0-263" name="__codelineno-0-263"></a><span class="sd">        ToolError: If the tool is not found or if there&#39;s an error during execution.</span>
+<a id="__codelineno-0-264" name="__codelineno-0-264"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-265" name="__codelineno-0-265"></a>    <span class="k">if</span> <span class="n">non_ai_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-266" name="__codelineno-0-266"></a>        <span class="n">non_ai_params</span> <span class="o">=</span> <span class="p">{}</span>
+<a id="__codelineno-0-267" name="__codelineno-0-267"></a>
+<a id="__codelineno-0-268" name="__codelineno-0-268"></a>    <span class="n">tool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tool</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<a id="__codelineno-0-269" name="__codelineno-0-269"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">tool</span><span class="p">:</span>
+<a id="__codelineno-0-270" name="__codelineno-0-270"></a>        <span class="k">raise</span> <span class="n">ToolError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tool &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; not found&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-271" name="__codelineno-0-271"></a>
+<a id="__codelineno-0-272" name="__codelineno-0-272"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-0-273" name="__codelineno-0-273"></a>        <span class="c1"># Merge non_ai_params with the arguments</span>
+<a id="__codelineno-0-274" name="__codelineno-0-274"></a>        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">arguments</span><span class="p">,</span> <span class="o">**</span><span class="n">non_ai_params</span><span class="p">}</span>
+<a id="__codelineno-0-275" name="__codelineno-0-275"></a>        <span class="k">return</span> <span class="n">tool</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">](</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="__codelineno-0-276" name="__codelineno-0-276"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-0-277" name="__codelineno-0-277"></a>        <span class="k">raise</span> <span class="n">ToolError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error calling tool &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1555,11 +1629,11 @@ returns the result.</p>
 
             <details class="quote">
               <summary>Source code in <code>openai_toolchain/tools.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-299">299</a></span>
-<span class="normal"><a href="#__codelineno-0-300">300</a></span>
-<span class="normal"><a href="#__codelineno-0-301">301</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-299" name="__codelineno-0-299"></a><span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-0-300" name="__codelineno-0-300"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Clears all registered tools.&quot;&quot;&quot;</span>
-<a id="__codelineno-0-301" name="__codelineno-0-301"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_tools</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-313">313</a></span>
+<span class="normal"><a href="#__codelineno-0-314">314</a></span>
+<span class="normal"><a href="#__codelineno-0-315">315</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-313" name="__codelineno-0-313"></a><span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-314" name="__codelineno-0-314"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Clears all registered tools.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-315" name="__codelineno-0-315"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_tools</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1626,21 +1700,7 @@ get_weather</p>
 
             <details class="quote">
               <summary>Source code in <code>openai_toolchain/tools.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-265">265</a></span>
-<span class="normal"><a href="#__codelineno-0-266">266</a></span>
-<span class="normal"><a href="#__codelineno-0-267">267</a></span>
-<span class="normal"><a href="#__codelineno-0-268">268</a></span>
-<span class="normal"><a href="#__codelineno-0-269">269</a></span>
-<span class="normal"><a href="#__codelineno-0-270">270</a></span>
-<span class="normal"><a href="#__codelineno-0-271">271</a></span>
-<span class="normal"><a href="#__codelineno-0-272">272</a></span>
-<span class="normal"><a href="#__codelineno-0-273">273</a></span>
-<span class="normal"><a href="#__codelineno-0-274">274</a></span>
-<span class="normal"><a href="#__codelineno-0-275">275</a></span>
-<span class="normal"><a href="#__codelineno-0-276">276</a></span>
-<span class="normal"><a href="#__codelineno-0-277">277</a></span>
-<span class="normal"><a href="#__codelineno-0-278">278</a></span>
-<span class="normal"><a href="#__codelineno-0-279">279</a></span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-279">279</a></span>
 <span class="normal"><a href="#__codelineno-0-280">280</a></span>
 <span class="normal"><a href="#__codelineno-0-281">281</a></span>
 <span class="normal"><a href="#__codelineno-0-282">282</a></span>
@@ -1658,39 +1718,53 @@ get_weather</p>
 <span class="normal"><a href="#__codelineno-0-294">294</a></span>
 <span class="normal"><a href="#__codelineno-0-295">295</a></span>
 <span class="normal"><a href="#__codelineno-0-296">296</a></span>
-<span class="normal"><a href="#__codelineno-0-297">297</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-265" name="__codelineno-0-265"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_openai_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-<a id="__codelineno-0-266" name="__codelineno-0-266"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets all registered tools in OpenAI function calling format.</span>
-<a id="__codelineno-0-267" name="__codelineno-0-267"></a>
-<a id="__codelineno-0-268" name="__codelineno-0-268"></a><span class="sd">    This method converts all registered tools to the format expected by the</span>
-<a id="__codelineno-0-269" name="__codelineno-0-269"></a><span class="sd">    OpenAI API for function calling. The resulting list can be passed directly</span>
-<a id="__codelineno-0-270" name="__codelineno-0-270"></a><span class="sd">    to the OpenAI API&#39;s `tools` parameter.</span>
-<a id="__codelineno-0-271" name="__codelineno-0-271"></a>
-<a id="__codelineno-0-272" name="__codelineno-0-272"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-273" name="__codelineno-0-273"></a><span class="sd">        list: A list of tools in OpenAI function calling format. Each tool is a</span>
-<a id="__codelineno-0-274" name="__codelineno-0-274"></a><span class="sd">            dictionary with &#39;type&#39; and &#39;function&#39; keys, where &#39;function&#39;</span>
-<a id="__codelineno-0-275" name="__codelineno-0-275"></a><span class="sd">            contains the tool&#39;s name, description, and parameters schema.</span>
-<a id="__codelineno-0-276" name="__codelineno-0-276"></a>
-<a id="__codelineno-0-277" name="__codelineno-0-277"></a><span class="sd">    Example:</span>
-<a id="__codelineno-0-278" name="__codelineno-0-278"></a><span class="sd">        &gt;&gt;&gt; @tool_registry.register</span>
-<a id="__codelineno-0-279" name="__codelineno-0-279"></a><span class="sd">        ... def get_weather(location: str) -&gt; str:</span>
-<a id="__codelineno-0-280" name="__codelineno-0-280"></a><span class="sd">        ...     return f&quot;Weather in {location}: Sunny&quot;</span>
-<a id="__codelineno-0-281" name="__codelineno-0-281"></a><span class="sd">        &gt;&gt;&gt; tools = tool_registry.get_openai_tools()</span>
-<a id="__codelineno-0-282" name="__codelineno-0-282"></a><span class="sd">        &gt;&gt;&gt; print(tools[0][&#39;function&#39;][&#39;name&#39;])</span>
-<a id="__codelineno-0-283" name="__codelineno-0-283"></a><span class="sd">        get_weather</span>
-<a id="__codelineno-0-284" name="__codelineno-0-284"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-285" name="__codelineno-0-285"></a>    <span class="n">tools</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="__codelineno-0-286" name="__codelineno-0-286"></a>    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">tool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tools</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<a id="__codelineno-0-287" name="__codelineno-0-287"></a>        <span class="n">tools</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-<a id="__codelineno-0-288" name="__codelineno-0-288"></a>            <span class="p">{</span>
-<a id="__codelineno-0-289" name="__codelineno-0-289"></a>                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-290" name="__codelineno-0-290"></a>                <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="p">{</span>
-<a id="__codelineno-0-291" name="__codelineno-0-291"></a>                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
-<a id="__codelineno-0-292" name="__codelineno-0-292"></a>                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">tool</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
-<a id="__codelineno-0-293" name="__codelineno-0-293"></a>                    <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="n">tool</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span>
-<a id="__codelineno-0-294" name="__codelineno-0-294"></a>                <span class="p">},</span>
-<a id="__codelineno-0-295" name="__codelineno-0-295"></a>            <span class="p">},</span>
-<a id="__codelineno-0-296" name="__codelineno-0-296"></a>        <span class="p">)</span>
-<a id="__codelineno-0-297" name="__codelineno-0-297"></a>    <span class="k">return</span> <span class="n">tools</span>
+<span class="normal"><a href="#__codelineno-0-297">297</a></span>
+<span class="normal"><a href="#__codelineno-0-298">298</a></span>
+<span class="normal"><a href="#__codelineno-0-299">299</a></span>
+<span class="normal"><a href="#__codelineno-0-300">300</a></span>
+<span class="normal"><a href="#__codelineno-0-301">301</a></span>
+<span class="normal"><a href="#__codelineno-0-302">302</a></span>
+<span class="normal"><a href="#__codelineno-0-303">303</a></span>
+<span class="normal"><a href="#__codelineno-0-304">304</a></span>
+<span class="normal"><a href="#__codelineno-0-305">305</a></span>
+<span class="normal"><a href="#__codelineno-0-306">306</a></span>
+<span class="normal"><a href="#__codelineno-0-307">307</a></span>
+<span class="normal"><a href="#__codelineno-0-308">308</a></span>
+<span class="normal"><a href="#__codelineno-0-309">309</a></span>
+<span class="normal"><a href="#__codelineno-0-310">310</a></span>
+<span class="normal"><a href="#__codelineno-0-311">311</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-279" name="__codelineno-0-279"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_openai_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<a id="__codelineno-0-280" name="__codelineno-0-280"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets all registered tools in OpenAI function calling format.</span>
+<a id="__codelineno-0-281" name="__codelineno-0-281"></a>
+<a id="__codelineno-0-282" name="__codelineno-0-282"></a><span class="sd">    This method converts all registered tools to the format expected by the</span>
+<a id="__codelineno-0-283" name="__codelineno-0-283"></a><span class="sd">    OpenAI API for function calling. The resulting list can be passed directly</span>
+<a id="__codelineno-0-284" name="__codelineno-0-284"></a><span class="sd">    to the OpenAI API&#39;s `tools` parameter.</span>
+<a id="__codelineno-0-285" name="__codelineno-0-285"></a>
+<a id="__codelineno-0-286" name="__codelineno-0-286"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-287" name="__codelineno-0-287"></a><span class="sd">        list: A list of tools in OpenAI function calling format. Each tool is a</span>
+<a id="__codelineno-0-288" name="__codelineno-0-288"></a><span class="sd">            dictionary with &#39;type&#39; and &#39;function&#39; keys, where &#39;function&#39;</span>
+<a id="__codelineno-0-289" name="__codelineno-0-289"></a><span class="sd">            contains the tool&#39;s name, description, and parameters schema.</span>
+<a id="__codelineno-0-290" name="__codelineno-0-290"></a>
+<a id="__codelineno-0-291" name="__codelineno-0-291"></a><span class="sd">    Example:</span>
+<a id="__codelineno-0-292" name="__codelineno-0-292"></a><span class="sd">        &gt;&gt;&gt; @tool_registry.register</span>
+<a id="__codelineno-0-293" name="__codelineno-0-293"></a><span class="sd">        ... def get_weather(location: str) -&gt; str:</span>
+<a id="__codelineno-0-294" name="__codelineno-0-294"></a><span class="sd">        ...     return f&quot;Weather in {location}: Sunny&quot;</span>
+<a id="__codelineno-0-295" name="__codelineno-0-295"></a><span class="sd">        &gt;&gt;&gt; tools = tool_registry.get_openai_tools()</span>
+<a id="__codelineno-0-296" name="__codelineno-0-296"></a><span class="sd">        &gt;&gt;&gt; print(tools[0][&#39;function&#39;][&#39;name&#39;])</span>
+<a id="__codelineno-0-297" name="__codelineno-0-297"></a><span class="sd">        get_weather</span>
+<a id="__codelineno-0-298" name="__codelineno-0-298"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-299" name="__codelineno-0-299"></a>    <span class="n">tools</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-300" name="__codelineno-0-300"></a>    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">tool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tools</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-0-301" name="__codelineno-0-301"></a>        <span class="n">tools</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<a id="__codelineno-0-302" name="__codelineno-0-302"></a>            <span class="p">{</span>
+<a id="__codelineno-0-303" name="__codelineno-0-303"></a>                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-304" name="__codelineno-0-304"></a>                <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-0-305" name="__codelineno-0-305"></a>                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+<a id="__codelineno-0-306" name="__codelineno-0-306"></a>                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">tool</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
+<a id="__codelineno-0-307" name="__codelineno-0-307"></a>                    <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="n">tool</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span>
+<a id="__codelineno-0-308" name="__codelineno-0-308"></a>                <span class="p">},</span>
+<a id="__codelineno-0-309" name="__codelineno-0-309"></a>            <span class="p">},</span>
+<a id="__codelineno-0-310" name="__codelineno-0-310"></a>        <span class="p">)</span>
+<a id="__codelineno-0-311" name="__codelineno-0-311"></a>    <span class="k">return</span> <span class="n">tools</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -2082,21 +2156,7 @@ as a tool with the global tool registry.</p>
 
             <details class="quote">
               <summary>Source code in <code>openai_toolchain/tools.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-308">308</a></span>
-<span class="normal"><a href="#__codelineno-0-309">309</a></span>
-<span class="normal"><a href="#__codelineno-0-310">310</a></span>
-<span class="normal"><a href="#__codelineno-0-311">311</a></span>
-<span class="normal"><a href="#__codelineno-0-312">312</a></span>
-<span class="normal"><a href="#__codelineno-0-313">313</a></span>
-<span class="normal"><a href="#__codelineno-0-314">314</a></span>
-<span class="normal"><a href="#__codelineno-0-315">315</a></span>
-<span class="normal"><a href="#__codelineno-0-316">316</a></span>
-<span class="normal"><a href="#__codelineno-0-317">317</a></span>
-<span class="normal"><a href="#__codelineno-0-318">318</a></span>
-<span class="normal"><a href="#__codelineno-0-319">319</a></span>
-<span class="normal"><a href="#__codelineno-0-320">320</a></span>
-<span class="normal"><a href="#__codelineno-0-321">321</a></span>
-<span class="normal"><a href="#__codelineno-0-322">322</a></span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-322">322</a></span>
 <span class="normal"><a href="#__codelineno-0-323">323</a></span>
 <span class="normal"><a href="#__codelineno-0-324">324</a></span>
 <span class="normal"><a href="#__codelineno-0-325">325</a></span>
@@ -2143,68 +2203,82 @@ as a tool with the global tool registry.</p>
 <span class="normal"><a href="#__codelineno-0-366">366</a></span>
 <span class="normal"><a href="#__codelineno-0-367">367</a></span>
 <span class="normal"><a href="#__codelineno-0-368">368</a></span>
-<span class="normal"><a href="#__codelineno-0-369">369</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-308" name="__codelineno-0-308"></a><span class="k">def</span><span class="w"> </span><span class="nf">tool</span><span class="p">(</span>
-<a id="__codelineno-0-309" name="__codelineno-0-309"></a>    <span class="n">func_or_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
-<a id="__codelineno-0-310" name="__codelineno-0-310"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-<a id="__codelineno-0-311" name="__codelineno-0-311"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Register a function as a tool with the global registry.</span>
-<a id="__codelineno-0-312" name="__codelineno-0-312"></a>
-<a id="__codelineno-0-313" name="__codelineno-0-313"></a><span class="sd">    This decorator can be used with or without arguments to register a function</span>
-<a id="__codelineno-0-314" name="__codelineno-0-314"></a><span class="sd">    as a tool with the global tool registry.</span>
-<a id="__codelineno-0-315" name="__codelineno-0-315"></a>
-<a id="__codelineno-0-316" name="__codelineno-0-316"></a><span class="sd">    Examples:</span>
-<a id="__codelineno-0-317" name="__codelineno-0-317"></a><span class="sd">        &gt;&gt;&gt; @tool</span>
-<a id="__codelineno-0-318" name="__codelineno-0-318"></a><span class="sd">        ... def my_function():</span>
-<a id="__codelineno-0-319" name="__codelineno-0-319"></a><span class="sd">        ...     pass</span>
-<a id="__codelineno-0-320" name="__codelineno-0-320"></a>
-<a id="__codelineno-0-321" name="__codelineno-0-321"></a><span class="sd">        &gt;&gt;&gt; @tool(&quot;custom_name&quot;)</span>
-<a id="__codelineno-0-322" name="__codelineno-0-322"></a><span class="sd">        ... def another_function():</span>
-<a id="__codelineno-0-323" name="__codelineno-0-323"></a><span class="sd">        ...     pass</span>
-<a id="__codelineno-0-324" name="__codelineno-0-324"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-325" name="__codelineno-0-325"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to register a function as a tool.</span>
+<span class="normal"><a href="#__codelineno-0-369">369</a></span>
+<span class="normal"><a href="#__codelineno-0-370">370</a></span>
+<span class="normal"><a href="#__codelineno-0-371">371</a></span>
+<span class="normal"><a href="#__codelineno-0-372">372</a></span>
+<span class="normal"><a href="#__codelineno-0-373">373</a></span>
+<span class="normal"><a href="#__codelineno-0-374">374</a></span>
+<span class="normal"><a href="#__codelineno-0-375">375</a></span>
+<span class="normal"><a href="#__codelineno-0-376">376</a></span>
+<span class="normal"><a href="#__codelineno-0-377">377</a></span>
+<span class="normal"><a href="#__codelineno-0-378">378</a></span>
+<span class="normal"><a href="#__codelineno-0-379">379</a></span>
+<span class="normal"><a href="#__codelineno-0-380">380</a></span>
+<span class="normal"><a href="#__codelineno-0-381">381</a></span>
+<span class="normal"><a href="#__codelineno-0-382">382</a></span>
+<span class="normal"><a href="#__codelineno-0-383">383</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-322" name="__codelineno-0-322"></a><span class="k">def</span><span class="w"> </span><span class="nf">tool</span><span class="p">(</span>
+<a id="__codelineno-0-323" name="__codelineno-0-323"></a>    <span class="n">func_or_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+<a id="__codelineno-0-324" name="__codelineno-0-324"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<a id="__codelineno-0-325" name="__codelineno-0-325"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Register a function as a tool with the global registry.</span>
 <a id="__codelineno-0-326" name="__codelineno-0-326"></a>
-<a id="__codelineno-0-327" name="__codelineno-0-327"></a><span class="sd">    This decorator provides a convenient way to register functions as tools with</span>
-<a id="__codelineno-0-328" name="__codelineno-0-328"></a><span class="sd">    the global tool registry. It can be used in several ways:</span>
+<a id="__codelineno-0-327" name="__codelineno-0-327"></a><span class="sd">    This decorator can be used with or without arguments to register a function</span>
+<a id="__codelineno-0-328" name="__codelineno-0-328"></a><span class="sd">    as a tool with the global tool registry.</span>
 <a id="__codelineno-0-329" name="__codelineno-0-329"></a>
-<a id="__codelineno-0-330" name="__codelineno-0-330"></a><span class="sd">    1. As a simple decorator::</span>
-<a id="__codelineno-0-331" name="__codelineno-0-331"></a>
-<a id="__codelineno-0-332" name="__codelineno-0-332"></a>
-<a id="__codelineno-0-333" name="__codelineno-0-333"></a><span class="sd">           @tool</span>
-<a id="__codelineno-0-334" name="__codelineno-0-334"></a><span class="sd">           def my_function():</span>
-<a id="__codelineno-0-335" name="__codelineno-0-335"></a><span class="sd">               pass</span>
-<a id="__codelineno-0-336" name="__codelineno-0-336"></a>
-<a id="__codelineno-0-337" name="__codelineno-0-337"></a><span class="sd">    2. With a custom name::</span>
-<a id="__codelineno-0-338" name="__codelineno-0-338"></a>
-<a id="__codelineno-0-339" name="__codelineno-0-339"></a>
-<a id="__codelineno-0-340" name="__codelineno-0-340"></a><span class="sd">           @tool(&quot;custom_name&quot;)</span>
-<a id="__codelineno-0-341" name="__codelineno-0-341"></a><span class="sd">           def my_function():</span>
-<a id="__codelineno-0-342" name="__codelineno-0-342"></a><span class="sd">               pass</span>
+<a id="__codelineno-0-330" name="__codelineno-0-330"></a><span class="sd">    Examples:</span>
+<a id="__codelineno-0-331" name="__codelineno-0-331"></a><span class="sd">        &gt;&gt;&gt; @tool</span>
+<a id="__codelineno-0-332" name="__codelineno-0-332"></a><span class="sd">        ... def my_function():</span>
+<a id="__codelineno-0-333" name="__codelineno-0-333"></a><span class="sd">        ...     pass</span>
+<a id="__codelineno-0-334" name="__codelineno-0-334"></a>
+<a id="__codelineno-0-335" name="__codelineno-0-335"></a><span class="sd">        &gt;&gt;&gt; @tool(&quot;custom_name&quot;)</span>
+<a id="__codelineno-0-336" name="__codelineno-0-336"></a><span class="sd">        ... def another_function():</span>
+<a id="__codelineno-0-337" name="__codelineno-0-337"></a><span class="sd">        ...     pass</span>
+<a id="__codelineno-0-338" name="__codelineno-0-338"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-339" name="__codelineno-0-339"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to register a function as a tool.</span>
+<a id="__codelineno-0-340" name="__codelineno-0-340"></a>
+<a id="__codelineno-0-341" name="__codelineno-0-341"></a><span class="sd">    This decorator provides a convenient way to register functions as tools with</span>
+<a id="__codelineno-0-342" name="__codelineno-0-342"></a><span class="sd">    the global tool registry. It can be used in several ways:</span>
 <a id="__codelineno-0-343" name="__codelineno-0-343"></a>
-<a id="__codelineno-0-344" name="__codelineno-0-344"></a><span class="sd">    3. With additional metadata::</span>
+<a id="__codelineno-0-344" name="__codelineno-0-344"></a><span class="sd">    1. As a simple decorator::</span>
 <a id="__codelineno-0-345" name="__codelineno-0-345"></a>
 <a id="__codelineno-0-346" name="__codelineno-0-346"></a>
-<a id="__codelineno-0-347" name="__codelineno-0-347"></a><span class="sd">           @tool(name=&quot;custom_name&quot;, category=&quot;weather&quot;)</span>
-<a id="__codelineno-0-348" name="__codelineno-0-348"></a><span class="sd">           def get_weather():</span>
+<a id="__codelineno-0-347" name="__codelineno-0-347"></a><span class="sd">           @tool</span>
+<a id="__codelineno-0-348" name="__codelineno-0-348"></a><span class="sd">           def my_function():</span>
 <a id="__codelineno-0-349" name="__codelineno-0-349"></a><span class="sd">               pass</span>
 <a id="__codelineno-0-350" name="__codelineno-0-350"></a>
-<a id="__codelineno-0-351" name="__codelineno-0-351"></a><span class="sd">    Args:</span>
-<a id="__codelineno-0-352" name="__codelineno-0-352"></a><span class="sd">        func_or_name: Either the function to decorate, a string name for the tool,</span>
-<a id="__codelineno-0-353" name="__codelineno-0-353"></a><span class="sd">            or None if using keyword arguments.</span>
-<a id="__codelineno-0-354" name="__codelineno-0-354"></a><span class="sd">        **kwargs: Additional metadata to include with the tool registration.</span>
-<a id="__codelineno-0-355" name="__codelineno-0-355"></a><span class="sd">            Common keys include &#39;name&#39; for a custom tool name and &#39;description&#39;</span>
-<a id="__codelineno-0-356" name="__codelineno-0-356"></a><span class="sd">            to override the function&#39;s docstring.</span>
+<a id="__codelineno-0-351" name="__codelineno-0-351"></a><span class="sd">    2. With a custom name::</span>
+<a id="__codelineno-0-352" name="__codelineno-0-352"></a>
+<a id="__codelineno-0-353" name="__codelineno-0-353"></a>
+<a id="__codelineno-0-354" name="__codelineno-0-354"></a><span class="sd">           @tool(&quot;custom_name&quot;)</span>
+<a id="__codelineno-0-355" name="__codelineno-0-355"></a><span class="sd">           def my_function():</span>
+<a id="__codelineno-0-356" name="__codelineno-0-356"></a><span class="sd">               pass</span>
 <a id="__codelineno-0-357" name="__codelineno-0-357"></a>
-<a id="__codelineno-0-358" name="__codelineno-0-358"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-359" name="__codelineno-0-359"></a><span class="sd">        Callable: The decorated function or a decorator function if called with</span>
-<a id="__codelineno-0-360" name="__codelineno-0-360"></a><span class="sd">            arguments.</span>
-<a id="__codelineno-0-361" name="__codelineno-0-361"></a>
-<a id="__codelineno-0-362" name="__codelineno-0-362"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-363" name="__codelineno-0-363"></a>    <span class="k">if</span> <span class="n">func_or_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func_or_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-<a id="__codelineno-0-364" name="__codelineno-0-364"></a>        <span class="c1"># @tool or @tool(&quot;name&quot;)</span>
-<a id="__codelineno-0-365" name="__codelineno-0-365"></a>        <span class="n">name</span> <span class="o">=</span> <span class="n">func_or_name</span>
-<a id="__codelineno-0-366" name="__codelineno-0-366"></a>        <span class="k">return</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">tool_registry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<a id="__codelineno-0-367" name="__codelineno-0-367"></a>    <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-0-368" name="__codelineno-0-368"></a>        <span class="c1"># @tool without arguments</span>
-<a id="__codelineno-0-369" name="__codelineno-0-369"></a>        <span class="k">return</span> <span class="n">tool_registry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">func_or_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="__codelineno-0-358" name="__codelineno-0-358"></a><span class="sd">    3. With additional metadata::</span>
+<a id="__codelineno-0-359" name="__codelineno-0-359"></a>
+<a id="__codelineno-0-360" name="__codelineno-0-360"></a>
+<a id="__codelineno-0-361" name="__codelineno-0-361"></a><span class="sd">           @tool(name=&quot;custom_name&quot;, category=&quot;weather&quot;)</span>
+<a id="__codelineno-0-362" name="__codelineno-0-362"></a><span class="sd">           def get_weather():</span>
+<a id="__codelineno-0-363" name="__codelineno-0-363"></a><span class="sd">               pass</span>
+<a id="__codelineno-0-364" name="__codelineno-0-364"></a>
+<a id="__codelineno-0-365" name="__codelineno-0-365"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-366" name="__codelineno-0-366"></a><span class="sd">        func_or_name: Either the function to decorate, a string name for the tool,</span>
+<a id="__codelineno-0-367" name="__codelineno-0-367"></a><span class="sd">            or None if using keyword arguments.</span>
+<a id="__codelineno-0-368" name="__codelineno-0-368"></a><span class="sd">        **kwargs: Additional metadata to include with the tool registration.</span>
+<a id="__codelineno-0-369" name="__codelineno-0-369"></a><span class="sd">            Common keys include &#39;name&#39; for a custom tool name and &#39;description&#39;</span>
+<a id="__codelineno-0-370" name="__codelineno-0-370"></a><span class="sd">            to override the function&#39;s docstring.</span>
+<a id="__codelineno-0-371" name="__codelineno-0-371"></a>
+<a id="__codelineno-0-372" name="__codelineno-0-372"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-373" name="__codelineno-0-373"></a><span class="sd">        Callable: The decorated function or a decorator function if called with</span>
+<a id="__codelineno-0-374" name="__codelineno-0-374"></a><span class="sd">            arguments.</span>
+<a id="__codelineno-0-375" name="__codelineno-0-375"></a>
+<a id="__codelineno-0-376" name="__codelineno-0-376"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-377" name="__codelineno-0-377"></a>    <span class="k">if</span> <span class="n">func_or_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func_or_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-0-378" name="__codelineno-0-378"></a>        <span class="c1"># @tool or @tool(&quot;name&quot;)</span>
+<a id="__codelineno-0-379" name="__codelineno-0-379"></a>        <span class="n">name</span> <span class="o">=</span> <span class="n">func_or_name</span>
+<a id="__codelineno-0-380" name="__codelineno-0-380"></a>        <span class="k">return</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">tool_registry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="__codelineno-0-381" name="__codelineno-0-381"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-382" name="__codelineno-0-382"></a>        <span class="c1"># @tool without arguments</span>
+<a id="__codelineno-0-383" name="__codelineno-0-383"></a>        <span class="k">return</span> <span class="n">tool_registry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">func_or_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
